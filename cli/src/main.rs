@@ -15,6 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+extern crate karaagecc_compiler;
+use karaagecc_compiler::compiler;
+
 fn main() {
-    println!("Hello, world!");
+    println!("{}", compiler::hello_world());
 }
