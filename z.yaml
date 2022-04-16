@@ -1,0 +1,6 @@
+default: run
+tasks:
+  run: cargo run $@
+  build: cargo build $@
+  test: cargo test $@
+  lint: cargo clippy $@
