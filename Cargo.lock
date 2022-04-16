@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "karaagecc"
+name = "karaagecc_cli"
 version = "0.1.0"
