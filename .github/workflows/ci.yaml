@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: zakuro9715/setup-z@main
+    - name: Build
+      run: z build --verbose
+    - name: Run
+      run: z run --verbose
+    - name: Lint
+      run: z lint --verbose
+    - name: Run tests
+      run: z test --verbose
