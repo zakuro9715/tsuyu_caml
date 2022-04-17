@@ -16,8 +16,11 @@
  */
 
 extern crate karaagecc_compiler;
-use karaagecc_compiler::compiler;
+use karaagecc_compiler as karaagecc;
 
 fn main() {
-    println!("{}", compiler::hello_world());
+    match karaagecc::compile() {
+        Ok(out) => println!("{}", out),
+        Err(_) => panic!("err"),
+    }
 }
