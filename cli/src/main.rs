@@ -16,11 +16,17 @@
  */
 
 extern crate karaagecc_compiler;
+
+use std::io::{self, Write};
 use karaagecc_compiler as karaagecc;
 
 fn main() {
-    match karaagecc::compile() {
-        Ok(out) => println!("{}", out),
+    match karaagecc::run() {
+        Ok(output) => {
+            io::stdout().write_all(&output.stdout).unwrap();
+            io::stderr().write_all(&output.stderr).unwrap();
+            std::process::exit(0);
+        }
         Err(_) => panic!("err"),
     }
 }
