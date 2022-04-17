@@ -1,3 +1,4 @@
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub enum Error {
     Message(String)
 }
