@@ -20,6 +20,7 @@ extern crate karaagecc_compiler;
 use std::io::{self, Write};
 use karaagecc_compiler as karaagecc;
 
+#[cfg(not(tarpaulin_include))]
 fn main() {
     match karaagecc::run() {
         Ok(output) => {
