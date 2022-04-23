@@ -1,5 +1,7 @@
 default: run
 tasks:
+  setup: |
+    rustup component add clippy
   run: cargo run $@
   build: cargo build $@
   test: cargo test $@
