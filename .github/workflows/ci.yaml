@@ -24,4 +24,4 @@ jobs:
     - name: Lint
       run: z lint --verbose
     - name: Run tests
-      run: z test --verbose
+      run: z test.cov --verbose

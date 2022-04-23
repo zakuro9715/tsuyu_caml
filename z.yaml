@@ -2,7 +2,10 @@ default: run
 tasks:
   setup: |
     rustup component add clippy
+    rustup component add llvm-tools-preview
+    cargo install cargo-tarpaulin
   run: cargo run $@
   build: cargo build $@
   test: cargo test $@
+  test.cov: cargo tarpaulin $@
   lint: cargo clippy $@
