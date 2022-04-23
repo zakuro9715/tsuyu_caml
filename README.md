@@ -1,5 +1,8 @@
 # karaagecc
 
+[![CI](https://github.com/zakuro9715/karaagecc/actions/workflows/ci.yaml/badge.svg)](https://github.com/zakuro9715/karaagecc/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/gh/zakuro9715/karaagecc/branch/main/graph/badge.svg?token=VfgytM8dtE)](https://codecov.io/gh/zakuro9715/karaagecc)
+
 [![karaagecc](https://i.gyazo.com/a1a9c41ab1830b30576e6aa404fbeac4.jpg)](https://gyazo.com/a1a9c41ab1830b30576e6aa404fbeac4)
 
 A toy C compiler written in rust for my study.
