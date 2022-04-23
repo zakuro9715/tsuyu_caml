@@ -26,4 +26,9 @@ jobs:
     - name: Lint
       run: z lint --verbose
     - name: Run tests
-      run: z test.cov --verbose
+      run: z test.cov --out xml --verbose
+    - name: Upload coverage
+      uses: codecov/codecov-action@v2
+      with:
+        fail_ci_if_error: true
+        verbose: true
