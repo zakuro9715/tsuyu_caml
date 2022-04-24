@@ -1,5 +1,3 @@
-use karaagecc_compiler as karaagecc;
-
 #[test]
 fn run() {
     assert_eq!(

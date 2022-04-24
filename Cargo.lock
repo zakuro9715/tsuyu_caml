@@ -3,12 +3,12 @@
 version = 3
 
 [[package]]
+name = "karaagecc"
+version = "0.1.0"
+
+[[package]]
 name = "karaagecc_cli"
 version = "0.1.0"
 dependencies = [
- "karaagecc_compiler",
+ "karaagecc",
 ]
-
-[[package]]
-name = "karaagecc_compiler"
-version = "0.1.0"

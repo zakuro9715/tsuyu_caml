@@ -15,10 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-extern crate karaagecc_compiler;
+extern crate karaagecc;
 
 use std::io::{self, Write};
-use karaagecc_compiler as karaagecc;
 
 #[cfg(not(tarpaulin_include))]
 fn main() {

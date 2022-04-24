@@ -8,4 +8,4 @@ name = "karaagecc"
 path = "src/main.rs"
 
 [dependencies]
-karaagecc_compiler = { path = "../compiler" }
+karaagecc = { path = "../karaagecc" }
