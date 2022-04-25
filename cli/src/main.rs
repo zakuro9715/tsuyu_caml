@@ -25,7 +25,7 @@ fn main() {
         Ok(output) => {
             io::stdout().write_all(&output.stdout).unwrap();
             io::stderr().write_all(&output.stderr).unwrap();
-            std::process::exit(0);
+            std::process::exit(output.status.code().unwrap());
         }
         Err(_) => panic!("err"),
     }

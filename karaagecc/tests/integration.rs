@@ -1,7 +1,4 @@
 #[test]
 fn run() {
-    assert_eq!(
-        std::str::from_utf8(&karaagecc::run().unwrap().stdout).unwrap(),
-        "Hello compiler\n"
-    )
+    assert_eq!(karaagecc::run().unwrap().status.code().unwrap(), 42,)
 }
