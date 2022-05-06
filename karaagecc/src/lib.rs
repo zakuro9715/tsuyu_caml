@@ -4,8 +4,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+extern crate karaageir;
+extern crate karaageir_codegen;
 extern crate tempfile;
 
+use karaageir::{Expr, Stmt, IR};
 use std::fs::File;
 use std::io::Write;
 use std::process::Command;
@@ -19,15 +22,11 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub fn compile() -> Result<String> {
-    Ok("
-.intel_syntax noprefix
-.global main
-
-main:
-    mov rax, 42
-    ret
-"
-    .to_string())
+    let mut ir = IR::new();
+    let main = ir.create_function("main").unwrap();
+    main.body
+        .push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(42))));
+    Ok(karaageir_codegen::x86_64::compile(&ir))
 }
 
 pub fn run() -> Result<std::process::Output> {

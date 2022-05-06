@@ -2,4 +2,6 @@
 members = [
   "cli",
   "karaagecc",
+  "karaageir",
+  "karaageir_codegen",
 ]

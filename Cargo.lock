@@ -36,6 +36,8 @@ dependencies = [
 name = "karaagecc"
 version = "0.1.0"
 dependencies = [
+ "karaageir",
+ "karaageir_codegen",
  "tempfile",
 ]
 
@@ -44,6 +46,17 @@ name = "karaagecc_cli"
 version = "0.1.0"
 dependencies = [
  "karaagecc",
+]
+
+[[package]]
+name = "karaageir"
+version = "0.1.0"
+
+[[package]]
+name = "karaageir_codegen"
+version = "0.1.0"
+dependencies = [
+ "karaageir",
 ]
 
 [[package]]

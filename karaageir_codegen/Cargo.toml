@@ -1,9 +1,7 @@
 [package]
-name = "karaagecc"
+name = "karaageir_codegen"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tempfile = "3.3.0"
 karaageir = { path = "../karaageir" }
-karaageir_codegen = { path = "../karaageir_codegen" }
