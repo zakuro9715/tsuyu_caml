@@ -30,16 +30,19 @@ impl fmt::Display for Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn compile() -> Result<String> {
+pub fn compile(source: impl Into<String>) -> Result<String> {
+    let source_string = source.into();
+    let value = source_string.parse::<i64>()
+        .map_err(|_| Error::Message(format!("parse error: {} is not number", source_string))) ?;
     let mut ir = IR::new();
     let main = ir.create_function("main").unwrap();
     main.body
-        .push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(42))));
+        .push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(value))));
     Ok(karaageir_codegen::x86_64::compile(&ir))
 }
 
-pub fn run() -> Result<std::process::Output> {
-    let asm = compile()?;
+pub fn run(source: impl Into<String>) -> Result<std::process::Output> {
+    let asm = compile(source)?;
 
     let tempdir = TempDir::new().expect("failed to create tempdir");
     let asm_path = tempdir.path().join("a.S");

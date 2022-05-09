@@ -10,7 +10,7 @@ use std::io::{self, Write};
 
 #[cfg(not(tarpaulin_include))]
 fn main() {
-    match karaagecc::run() {
+    match karaagecc::run("42") {
         Ok(output) => {
             io::stdout().write_all(&output.stdout).unwrap();
             io::stderr().write_all(&output.stderr).unwrap();
