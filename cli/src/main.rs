@@ -8,8 +8,27 @@ extern crate karaagecc;
 
 use std::io::{self, Write};
 
+use clap::{Parser};
+
+#[derive(Parser)]
+#[clap(
+    name = "karaagecc",
+    version,
+    about = "Karaage C Compiler",
+    help_template = "\
+{name} - {about}
+
+{usage-heading}
+    {usage}
+{all-args}"
+)]
+struct App {
+}
+
+
 #[cfg(not(tarpaulin_include))]
 fn main() {
+    let cli = App::parse();
     match karaagecc::run("42") {
         Ok(output) => {
             io::stdout().write_all(&output.stdout).unwrap();

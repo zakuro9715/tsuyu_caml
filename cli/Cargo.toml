@@ -8,4 +8,5 @@ name = "karaagecc"
 path = "src/main.rs"
 
 [dependencies]
+clap = { version = "3", features = ["derive"] }
 karaagecc = { path = "../karaagecc" }
