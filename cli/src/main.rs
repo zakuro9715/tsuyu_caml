@@ -16,6 +16,6 @@ fn main() {
             io::stderr().write_all(&output.stderr).unwrap();
             std::process::exit(output.status.code().unwrap());
         }
-        Err(_) => panic!("err"),
+        Err(e) => eprintln!("{}", e),
     }
 }

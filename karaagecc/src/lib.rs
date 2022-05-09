@@ -9,6 +9,7 @@ extern crate karaageir_codegen;
 extern crate tempfile;
 
 use karaageir::{Expr, Stmt, IR};
+use std::fmt;
 use std::fs::File;
 use std::io::Write;
 use std::process::Command;
@@ -17,6 +18,14 @@ use tempfile::TempDir;
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub enum Error {
     Message(String),
+}
+
+impl fmt::Display for Error {
+   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Message(msg) => write!(f, "{}", msg),
+        }
+   }
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
