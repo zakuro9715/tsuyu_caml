@@ -6,9 +6,11 @@
 
 extern crate karaageir;
 extern crate karaageir_codegen;
+extern crate karaagecc_source;
 extern crate tempfile;
 
 use karaageir::{Expr, Stmt, IR};
+use karaagecc_source::Source;
 use std::fmt;
 use std::fs::File;
 use std::io::Write;
@@ -30,10 +32,10 @@ impl fmt::Display for Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn compile(source: impl Into<String>) -> Result<String> {
-    let source_string = source.into();
-    let value = source_string.parse::<i64>()
-        .map_err(|_| Error::Message(format!("parse error: {} is not number", source_string))) ?;
+pub fn compile(source: impl AsRef<Source>) -> Result<String> {
+    let code = &source.as_ref().code;
+    let value = code.parse::<i64>()
+        .map_err(|_| Error::Message(format!("parse error: {} is not number", code))) ?;
     let mut ir = IR::new();
     let main = ir.create_function("main").unwrap();
     main.body
@@ -41,7 +43,7 @@ pub fn compile(source: impl Into<String>) -> Result<String> {
     Ok(karaageir_codegen::x86_64::compile(&ir))
 }
 
-pub fn run(source: impl Into<String>) -> Result<std::process::Output> {
+pub fn run(source: impl AsRef<Source>) -> Result<std::process::Output> {
     let asm = compile(source)?;
 
     let tempdir = TempDir::new().expect("failed to create tempdir");

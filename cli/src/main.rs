@@ -5,10 +5,11 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 extern crate karaagecc;
+extern crate karaagecc_source;
 
 use std::io::{self, Write};
-
 use clap::{Parser};
+use karaagecc_source::Source;
 
 #[derive(Parser)]
 #[clap(
@@ -29,7 +30,7 @@ struct App {
 #[cfg(not(tarpaulin_include))]
 fn main() {
     let cli = App::parse();
-    match karaagecc::run("42") {
+    match karaagecc::run(Source::inline("42")) {
         Ok(output) => {
             io::stdout().write_all(&output.stdout).unwrap();
             io::stderr().write_all(&output.stderr).unwrap();
