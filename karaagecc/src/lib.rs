@@ -4,13 +4,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+extern crate karaagecc_source;
 extern crate karaageir;
 extern crate karaageir_codegen;
-extern crate karaagecc_source;
 extern crate tempfile;
 
-use karaageir::{Expr, Stmt, IR};
 use karaagecc_source::Source;
+use karaageir::{Expr, Stmt, IR};
 use std::fmt;
 use std::fs::File;
 use std::io::Write;
@@ -23,19 +23,20 @@ pub enum Error {
 }
 
 impl fmt::Display for Error {
-   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::Message(msg) => write!(f, "{}", msg),
         }
-   }
+    }
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     let code = &source.as_ref().code;
-    let value = code.parse::<i64>()
-        .map_err(|_| Error::Message(format!("parse error: {} is not number", code))) ?;
+    let value = code
+        .parse::<i64>()
+        .map_err(|_| Error::Message(format!("parse error: {} is not number", code)))?;
     let mut ir = IR::new();
     let main = ir.create_function("main").unwrap();
     main.body

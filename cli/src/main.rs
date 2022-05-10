@@ -7,9 +7,9 @@
 extern crate karaagecc;
 extern crate karaagecc_source;
 
-use std::io::{self, Write};
-use clap::{Parser};
+use clap::Parser;
 use karaagecc_source::Source;
+use std::io::{self, Write};
 
 #[derive(Parser)]
 #[clap(
@@ -23,9 +23,7 @@ use karaagecc_source::Source;
     {usage}
 {all-args}"
 )]
-struct App {
-}
-
+struct App {}
 
 #[cfg(not(tarpaulin_include))]
 fn main() {
