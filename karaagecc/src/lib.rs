@@ -38,9 +38,11 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
         .parse::<i64>()
         .map_err(|_| Error::Message(format!("parse error: {} is not number", code)))?;
     let mut ir = IR::new();
+
     let main = ir.create_function("main").unwrap();
-    main.body
-        .push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(value))));
+    main.body.push(Stmt::Dump(Expr::Immediate(karaageir::Value::Int(value))));
+    main.body.push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(0))));
+
     Ok(karaageir_codegen::x86_64::compile(&ir))
 }
 
