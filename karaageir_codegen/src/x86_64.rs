@@ -6,7 +6,7 @@
 
 extern crate karaageir;
 use karaageir::{Expr, Function, Stmt, Value, IR, Type};
-use std::{collections::HashMap, default, fmt::Write};
+use std::{collections::HashMap, fmt::Write};
 
 pub fn compile(ir: &IR) -> String {
     let mut gen = Gen::default();

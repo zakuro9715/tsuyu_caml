@@ -27,7 +27,7 @@ struct App {}
 
 #[cfg(not(tarpaulin_include))]
 fn main() {
-    let cli = App::parse();
+    let _cli = App::parse();
     match karaagecc::run(Source::inline("42")) {
         Ok(output) => {
             io::stdout().write_all(&output.stdout).unwrap();
