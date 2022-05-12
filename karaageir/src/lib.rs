@@ -1,13 +1,34 @@
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
+pub enum Type {
+    Int,
+}
+
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Value {
     Int(i64),
+}
+
+impl Value {
+    pub fn typ(&self) -> Type {
+        match self {
+            Value::Int(_) => Type::Int,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
 pub enum Expr {
     Immediate(Value),
+}
+
+impl Expr {
+    pub fn typ(&self) -> Type {
+        match self {
+            Expr::Immediate(v) => v.typ()
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
