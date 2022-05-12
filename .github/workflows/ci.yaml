@@ -21,8 +21,6 @@ jobs:
       run: z setup
     - name: Build
       run: z build --verbose
-    - name: Run
-      run: z run --verbose
     - name: Lint
       run: z lint --verbose
     - name: Run tests
