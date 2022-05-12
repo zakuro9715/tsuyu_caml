@@ -33,6 +33,7 @@ impl Expr {
 
 #[derive(Debug, Clone)]
 pub enum Stmt {
+    Dump(Expr),
     Return(Expr),
 }
 
