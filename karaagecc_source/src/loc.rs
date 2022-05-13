@@ -4,7 +4,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::fmt;
+use std::{
+    cmp,
+    fmt,
+};
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct Loc {
@@ -20,6 +23,12 @@ impl Default for Loc {
             line: 1,
             column: 1
         }
+    }
+}
+
+impl PartialOrd for Loc {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        self.index.partial_cmp(&other.index)
     }
 }
 
