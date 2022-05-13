@@ -40,7 +40,7 @@ impl Source {
 
 #[cfg(test)]
 mod tests {
-    use crate::*;
+    use super::*;
 
     #[test]
     fn test_inline() {
