@@ -12,6 +12,7 @@ use std::{
 #[derive(PartialEq, Eq, Clone)]
 pub struct Loc {
     pub index: usize,
+    pub len: usize,
     pub line: usize,
     pub column: usize,
 }
@@ -20,6 +21,7 @@ impl Default for Loc {
     fn default() -> Self {
         Self {
             index: 0,
+            len: 1,
             line: 1,
             column: 1
         }
@@ -35,8 +37,9 @@ impl PartialOrd for Loc {
 impl fmt::Display for Loc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,
-            "{{ index: {index}, line: {line}, column: {column} }}",
+            "{{ index: {index}, len: {len}, line: {line}, column: {column} }}",
             index = self.index,
+            len = self.len,
             line = self.line,
             column = self.column,
         )
@@ -54,8 +57,8 @@ impl Loc {
         Self::default()
     }
 
-    pub fn new(index: usize, line: usize, column: usize) -> Self {
-        Self { index, line, column }
+    pub fn new(index: usize, len: usize, line: usize, column: usize) -> Self {
+        Self { index, len, line, column }
     }
 }
 
@@ -70,12 +73,18 @@ mod tests {
 
     #[test]
     fn test_new() {
-        assert_eq!(Loc::new(1, 2, 3), Loc { index: 1, line: 2, column: 3 });
+        assert_eq!(Loc::new(1, 1, 2, 3), Loc { index: 1, len: 1, line: 2, column: 3 });
     }
 
     #[test]
     fn test_fmt() {
-        assert_eq!(format!("{}", Loc::new(1, 2, 3)), "{ index: 1, line: 2, column: 3 }");
-        assert_eq!(format!("{:?}", Loc::new(0, 1, 2)), "Loc { index: 0, line: 1, column: 2 }");
+        assert_eq!(
+            format!("{}", Loc::new(1, 2, 2, 3)),
+            "{ index: 1, len: 2, line: 2, column: 3 }",
+        );
+        assert_eq!(
+            format!("{:?}", Loc::new(0, 1, 1, 2)),
+            "Loc { index: 0, len: 1, line: 1, column: 2 }",
+        );
     }
 }

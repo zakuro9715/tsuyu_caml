@@ -9,6 +9,3 @@ pub use crate::source::*;
 
 mod loc;
 pub use crate::loc::*;
-
-mod range;
-pub use crate::range::*;
