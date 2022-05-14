@@ -1,0 +1,7 @@
+[package]
+name = "karaagecc_token"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+karaagecc_source = { path = "../karaagecc_source" }

@@ -135,6 +135,7 @@ name = "karaagecc"
 version = "0.1.0"
 dependencies = [
  "karaagecc_source",
+ "karaagecc_token",
  "karaageir",
  "karaageir_codegen",
  "tempfile",
@@ -154,6 +155,13 @@ name = "karaagecc_source"
 version = "0.1.0"
 dependencies = [
  "nanoid",
+]
+
+[[package]]
+name = "karaagecc_token"
+version = "0.1.0"
+dependencies = [
+ "karaagecc_source",
 ]
 
 [[package]]

@@ -3,6 +3,7 @@ members = [
   "cli",
   "karaagecc",
   "karaagecc_source",
+  "karaagecc_token",
   "karaageir",
   "karaageir_codegen",
 ]

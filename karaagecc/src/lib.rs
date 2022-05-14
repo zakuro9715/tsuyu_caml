@@ -5,11 +5,13 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 extern crate karaagecc_source;
+extern crate karaagecc_token;
 extern crate karaageir;
 extern crate karaageir_codegen;
 extern crate tempfile;
 
-use karaagecc_source::Source;
+use karaagecc_source::{Source, Loc};
+use karaagecc_token::TokenKind::{self, IntLiteral};
 use karaageir::{Expr, Stmt, IR};
 use std::fmt;
 use std::fs::File;
@@ -34,14 +36,22 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     let code = &source.as_ref().code;
-    let value = code
+    let token = code
         .parse::<i64>()
-        .map_err(|_| Error::Message(format!("parse error: {} is not number", code)))?;
-    let mut ir = IR::new();
+        .map(|i| IntLiteral(i))
+        .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code)))
+        .into_token(Loc::head());
+    let value = match token.kind {
+        IntLiteral(i) => Ok(i),
+        TokenKind::Error(message) => Err(Error::Message(message)),
+    }?;
 
+    let mut ir = IR::new();
     let main = ir.create_function("main").unwrap();
-    main.body.push(Stmt::Dump(Expr::Immediate(karaageir::Value::Int(value))));
-    main.body.push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(0))));
+    main.body
+        .push(Stmt::Dump(Expr::Immediate(karaageir::Value::Int(value))));
+    main.body
+        .push(Stmt::Return(Expr::Immediate(karaageir::Value::Int(0))));
 
     Ok(karaageir_codegen::x86_64::compile(&ir))
 }
