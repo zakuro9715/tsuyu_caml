@@ -5,7 +5,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 extern crate karaageir;
-use karaageir::{Expr, Function, Stmt, Value, IR, Type};
+use karaageir::{Expr, Function, Stmt, Type, Value, IR};
 use std::{collections::HashMap, fmt::Write};
 
 pub fn compile(ir: &IR) -> String {
@@ -58,14 +58,17 @@ impl Gen {
     fn string_constant(&mut self, value: &str) {
         let label = format!(".LC.str.{}", self.lc_str_count);
         self.lc_str_count += 1;
-        write!(&mut self.out_lc, concat!(
+        write!(
+            &mut self.out_lc,
+            concat!(
                 ".section .rodata\n",
                 "{label}:\n",
                 "\t.string \"{value}\"\n",
             ),
-            label=label,
-            value=value.replace("\n", "\\n").replace("\"", "\\\""),
-        ).unwrap();
+            label = label,
+            value = value.replace("\n", "\\n").replace("\"", "\\\""),
+        )
+        .unwrap();
         self.write(&format!("[rip + {}]", &label));
     }
 
@@ -89,7 +92,6 @@ impl Gen {
         }
     }
 
-
     fn stmt(&mut self, stmt: &Stmt) {
         match stmt {
             Stmt::Return(expr) => {
@@ -101,9 +103,12 @@ impl Gen {
                 self.expr(expr);
                 self.writeln("mov rsi, rax");
                 self.write("lea rdi, ");
-                self.string_constant(&format!("{}\n", match expr.typ() {
-                    Type::Int => "%lld"
-                }));
+                self.string_constant(&format!(
+                    "{}\n",
+                    match expr.typ() {
+                        Type::Int => "%lld",
+                    }
+                ));
                 self.writeln("");
                 self.writeln("call printf@PLT")
             }

@@ -4,10 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::{
-    cmp,
-    fmt,
-};
+use std::{cmp, fmt};
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct Loc {
@@ -23,7 +20,7 @@ impl Default for Loc {
             index: 0,
             len: 1,
             line: 1,
-            column: 1
+            column: 1,
         }
     }
 }
@@ -36,7 +33,8 @@ impl PartialOrd for Loc {
 
 impl fmt::Display for Loc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,
+        write!(
+            f,
             "{{ index: {index}, len: {len}, line: {line}, column: {column} }}",
             index = self.index,
             len = self.len,
@@ -58,7 +56,12 @@ impl Loc {
     }
 
     pub fn new(index: usize, len: usize, line: usize, column: usize) -> Self {
-        Self { index, len, line, column }
+        Self {
+            index,
+            len,
+            line,
+            column,
+        }
     }
 }
 
@@ -73,7 +76,15 @@ mod tests {
 
     #[test]
     fn test_new() {
-        assert_eq!(Loc::new(1, 1, 2, 3), Loc { index: 1, len: 1, line: 2, column: 3 });
+        assert_eq!(
+            Loc::new(1, 1, 2, 3),
+            Loc {
+                index: 1,
+                len: 1,
+                line: 2,
+                column: 3
+            }
+        );
     }
 
     #[test]

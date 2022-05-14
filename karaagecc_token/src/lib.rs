@@ -15,15 +15,12 @@ pub enum TokenKind {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Token {
-   pub kind: TokenKind,
-   pub loc: Loc,
+    pub kind: TokenKind,
+    pub loc: Loc,
 }
 
 impl TokenKind {
     pub fn into_token(self, loc: Loc) -> Token {
-        Token{
-            kind: self,
-            loc,
-        }
+        Token { kind: self, loc }
     }
 }

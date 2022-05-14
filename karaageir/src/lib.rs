@@ -26,7 +26,7 @@ pub enum Expr {
 impl Expr {
     pub fn typ(&self) -> Type {
         match self {
-            Expr::Immediate(v) => v.typ()
+            Expr::Immediate(v) => v.typ(),
         }
     }
 }

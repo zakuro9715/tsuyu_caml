@@ -10,7 +10,7 @@ extern crate karaageir;
 extern crate karaageir_codegen;
 extern crate tempfile;
 
-use karaagecc_source::{Source, Loc};
+use karaagecc_source::{Loc, Source};
 use karaagecc_token::TokenKind::{self, IntLiteral};
 use karaageir::{Expr, Stmt, IR};
 use std::fmt;
