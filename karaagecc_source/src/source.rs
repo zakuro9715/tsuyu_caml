@@ -29,12 +29,11 @@ impl Source {
     }
 
     pub fn read_file(path: impl Into<PathBuf>) -> io::Result<Source> {
-        let path_value = path.into();
-        let code = fs::read_to_string(&path_value)?;
-        Ok(Self {
-            path: path_value,
-            code,
-        })
+        fn inner(path: PathBuf) -> io::Result<Source> {
+            let code = fs::read_to_string(&path)?;
+            Ok(Source { path: path, code })
+        }
+        inner(path.into())
     }
 }
 
