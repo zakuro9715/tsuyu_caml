@@ -7,7 +7,7 @@
 use karaageir::{Expr, Function, Stmt, Type, Value, IR};
 use std::{collections::HashMap, fmt::Write};
 
-pub fn compile(ir: &IR) -> String {
+pub fn compile(ir: &IR<'_>) -> String {
     let mut gen = Gen::default();
     gen.gen(ir)
 }
@@ -22,7 +22,7 @@ struct Gen {
 }
 
 impl Gen {
-    fn gen(&mut self, ir: &IR) -> String {
+    fn gen(&mut self, ir: &IR<'_>) -> String {
         self.out_head = ".intel_syntax noprefix\n".to_string();
         self.functions(&ir.functions);
 
