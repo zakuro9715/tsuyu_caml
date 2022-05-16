@@ -37,6 +37,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     let code = &source.as_ref().code;
     let token = code
+        .trim()
         .parse::<i64>()
         .map(|i| IntLiteral(i))
         .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code)))
