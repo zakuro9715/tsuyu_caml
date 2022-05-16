@@ -11,4 +11,4 @@ tasks:
   fix: z lint fix && z fmt
   fmt: cargo fmt
   lint: cargo clippy --all-targets --all-features $@
-  lint.fix: z lint --fix
+  lint.fix: z lint --fix --allow-dirty
