@@ -4,12 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::path::PathBuf;
-use std::{fs, io};
+use std::{
+    fmt, fs, io,
+    path::{Path, PathBuf},
+};
+
+//impl fmt::Display for Path
 
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Source {
-    pub path: PathBuf,
+    pub path: Box<Path>,
     pub code: String,
 }
 
@@ -23,17 +27,17 @@ impl Source {
     pub fn inline(code: impl Into<String>) -> Self {
         use nanoid::nanoid;
         Self {
-            path: PathBuf::from(format!("__inline{}", nanoid!())),
+            path: PathBuf::from(&format!("__inline{}", nanoid!())).into_boxed_path(),
             code: code.into(),
         }
     }
 
     pub fn read_file(path: impl Into<PathBuf>) -> io::Result<Source> {
-        fn inner(path: PathBuf) -> io::Result<Source> {
+        fn inner(path: Box<Path>) -> io::Result<Source> {
             let code = fs::read_to_string(&path)?;
-            Ok(Source { path: path, code })
+            Ok(Source { path, code })
         }
-        inner(path.into())
+        inner(path.into().into_boxed_path())
     }
 }
 
@@ -56,10 +60,11 @@ mod tests {
 
     #[test]
     fn test_read_file() {
-        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("Cargo.toml");
+        let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("Cargo.toml");
         let source = Source::read_file(&path).unwrap();
-        assert_eq!(source.path, path);
-        assert_eq!(source.code, fs::read_to_string(&path).unwrap());
+        let code = fs::read_to_string(&path).unwrap();
+        assert_eq!(source.path, path.into_boxed_path());
+        assert_eq!(source.code, code);
         assert_ne!(source.code.len(), 0);
     }
 
