@@ -4,12 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-extern crate karaagecc_source;
-extern crate karaagecc_token;
-extern crate karaageir;
-extern crate karaageir_codegen;
-extern crate tempfile;
-
 use karaagecc_source::{Loc, Source};
 use karaagecc_token::TokenKind::{self, IntLiteral};
 use karaageir::{Expr, Stmt, IR};
@@ -39,7 +33,7 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     let token = code
         .trim()
         .parse::<i64>()
-        .map(|i| IntLiteral(i))
+        .map(IntLiteral)
         .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code)))
         .into_token(Loc::head());
     let value = match token.kind {

@@ -4,13 +4,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-extern crate karaageir;
 use karaageir::{Expr, Function, Stmt, Type, Value, IR};
 use std::{collections::HashMap, fmt::Write};
 
 pub fn compile(ir: &IR) -> String {
     let mut gen = Gen::default();
-    gen.gen(&ir)
+    gen.gen(ir)
 }
 
 #[derive(Default)]
@@ -36,7 +35,7 @@ impl Gen {
     }
 
     fn write(&mut self, s: &str) {
-        if self.out.ends_with("\n") {
+        if self.out.ends_with('\n') {
             self.out.write_str(&"\t".repeat(self.indent_size)).unwrap();
         }
         self.out.write_str(s).unwrap();
@@ -44,7 +43,7 @@ impl Gen {
 
     fn writeln(&mut self, s: &str) {
         self.write(s);
-        self.out.push_str("\n");
+        self.out.push('\n');
     }
 
     fn indent(&mut self) {
@@ -66,7 +65,7 @@ impl Gen {
                 "\t.string \"{value}\"\n",
             ),
             label = label,
-            value = value.replace("\n", "\\n").replace("\"", "\\\""),
+            value = value.replace('\n', "\\n").replace('\"', "\\\""),
         )
         .unwrap();
         self.write(&format!("[rip + {}]", &label));
@@ -95,7 +94,7 @@ impl Gen {
     fn stmt(&mut self, stmt: &Stmt) {
         match stmt {
             Stmt::Return(expr) => {
-                self.expr(&expr);
+                self.expr(expr);
                 self.writeln("leave");
                 self.writeln("ret")
             }
