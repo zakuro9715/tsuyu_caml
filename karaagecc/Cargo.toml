@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 tempfile = "3.3.0"
+karaagecc_error = { path = "../karaagecc_error" }
 karaagecc_source = { path = "../karaagecc_source" }
 karaagecc_token = { path = "../karaagecc_token" }
 karaageir = { path = "../karaageir" }

@@ -2,6 +2,7 @@
 members = [
   "cli",
   "karaagecc",
+  "karaagecc_error",
   "karaagecc_source",
   "karaagecc_token",
   "karaageir",

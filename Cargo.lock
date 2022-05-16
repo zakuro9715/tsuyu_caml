@@ -214,6 +214,7 @@ name = "karaagecc"
 version = "0.1.0"
 dependencies = [
  "insta",
+ "karaagecc_error",
  "karaagecc_source",
  "karaagecc_token",
  "karaageir",
@@ -228,6 +229,13 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "karaagecc",
+ "karaagecc_source",
+]
+
+[[package]]
+name = "karaagecc_error"
+version = "0.1.0"
+dependencies = [
  "karaagecc_source",
 ]
 
