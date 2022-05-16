@@ -22,7 +22,7 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
         .into_token(Loc::head());
     let value = match token.kind {
         IntLiteral(i) => Ok(i),
-        TokenKind::Error(message) => Err(Error::Message(message)),
+        TokenKind::Error(message) => Err(Error::from_message(message)),
     }?;
 
     let mut ir = IR::new();
