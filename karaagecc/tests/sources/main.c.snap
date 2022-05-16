@@ -1,0 +1,12 @@
+---
+source: karaagecc/tests/integration.rs
+expression: "karaage_testutil::run_source(path)"
+input_file: karaagecc/tests/sources/main.c
+---
+stdout_text = '''
+10
+'''
+stdout_bytes = []
+stderr_text = ''
+stderr_bytes = []
+code = 0

@@ -9,3 +9,7 @@ karaagecc_source = { path = "../karaagecc_source" }
 karaagecc_token = { path = "../karaagecc_token" }
 karaageir = { path = "../karaageir" }
 karaageir_codegen = { path = "../karaageir_codegen" }
+
+[dev-dependencies]
+insta = { version = "1.14.0", features = ["glob", "toml"] }
+serde = { version = "1.0", features = ["derive"] }
