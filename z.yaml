@@ -3,8 +3,9 @@ tasks:
   setup: |
     rustup component add clippy
     cargo install cargo-tarpaulin
-  run: cargo run -- $@
+  run: cargo run $@
   build: cargo build $@
   test: cargo test $@
   test.cov: cargo tarpaulin $@
   lint: cargo clippy $@
+  lint.fix: cargo clippy --fix $@
