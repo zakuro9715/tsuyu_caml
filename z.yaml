@@ -6,6 +6,7 @@ tasks:
   run: cargo run $@
   build: cargo build $@
   test: cargo test $@
+  test.review: cargo insta test --review
   test.cov: cargo tarpaulin $@
   lint: cargo clippy $@
   lint.fix: cargo clippy --fix $@
