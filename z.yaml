@@ -8,5 +8,7 @@ tasks:
   test: cargo test $@
   test.review: cargo insta test --review
   test.cov: cargo tarpaulin $@
+  fix: z lint fix && z fmt
+  fmt: cargo fmt
   lint: cargo clippy --all-targets --all-features $@
   lint.fix: z lint --fix
