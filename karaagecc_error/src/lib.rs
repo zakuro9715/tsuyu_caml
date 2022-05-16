@@ -24,6 +24,8 @@ impl fmt::Display for Error {
     }
 }
 
+impl std::error::Error for Error {}
+
 impl Error {
     pub fn new() -> Self {
         Self::default()
