@@ -210,6 +210,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1aab8fc367588b89dcee83ab0fd66b72b50b72fa1904d7095045ace2b0c81c35"
 
 [[package]]
+name = "karaage_asserts"
+version = "0.1.0"
+dependencies = [
+ "paste",
+]
+
+[[package]]
 name = "karaagecc"
 version = "0.1.0"
 dependencies = [
@@ -236,6 +243,7 @@ dependencies = [
 name = "karaagecc_error"
 version = "0.1.0"
 dependencies = [
+ "karaage_asserts",
  "karaagecc_source",
 ]
 
@@ -243,6 +251,7 @@ dependencies = [
 name = "karaagecc_source"
 version = "0.1.0"
 dependencies = [
+ "karaage_asserts",
  "nanoid",
 ]
 
@@ -250,12 +259,16 @@ dependencies = [
 name = "karaagecc_token"
 version = "0.1.0"
 dependencies = [
+ "karaage_asserts",
  "karaagecc_source",
 ]
 
 [[package]]
 name = "karaageir"
 version = "0.1.0"
+dependencies = [
+ "karaage_asserts",
+]
 
 [[package]]
 name = "karaageir_codegen"
@@ -317,6 +330,12 @@ name = "os_str_bytes"
 version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8e22443d1643a904602595ba1cd8f7d896afe56d26712531c5ff73a15b2fbf64"
+
+[[package]]
+name = "paste"
+version = "1.0.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c520e05135d6e763148b6426a837e239041653ba7becd2e538c076c738025fc"
 
 [[package]]
 name = "ppv-lite86"

@@ -23,3 +23,10 @@ impl TokenKind {
         Token { kind: self, loc }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+    use karaage_asserts::*;
+    fn_test_send_sync!(Token);
+}

@@ -63,3 +63,11 @@ impl<'a> IR<'a> {
         self.functions.get_mut(name)
     }
 }
+
+#[cfg(tests)]
+mod tests {
+    use crate::*;
+    use karaage_asserts::*;
+
+    fn_test_send_sync!(IR);
+}

@@ -7,4 +7,5 @@ members = [
   "karaagecc_token",
   "karaageir",
   "karaageir_codegen",
+  "karaage_asserts",
 ]

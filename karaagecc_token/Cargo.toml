@@ -5,3 +5,6 @@ edition = "2021"
 
 [dependencies]
 karaagecc_source = { path = "../karaagecc_source" }
+
+[dev-dependencies]
+karaage_asserts = { path = "../karaage_asserts" }

@@ -49,6 +49,11 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use crate::*;
+    use karaage_asserts::*;
+
+    type ResultString = Result<String>;
+    fn_test_send_sync!(Error);
+    fn_test_send_sync!(ResultString);
 
     #[test]
     fn test_new_error() {

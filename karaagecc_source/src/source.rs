@@ -44,6 +44,9 @@ impl Source {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use karaage_asserts::*;
+
+    fn_test_send_sync!(Source);
 
     #[test]
     fn test_inline() {
