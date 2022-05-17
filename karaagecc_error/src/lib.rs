@@ -52,8 +52,8 @@ mod tests {
     use karaage_asserts::*;
 
     type ResultString = Result<String>;
-    fn_test_send_sync!(Error);
-    fn_test_send_sync!(ResultString);
+    fn_test_data_traits!(Error);
+    fn_test_data_traits!(ResultString);
 
     #[test]
     fn test_new_error() {

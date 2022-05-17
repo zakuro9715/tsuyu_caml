@@ -74,6 +74,9 @@ impl Loc {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use karaage_asserts::*;
+
+    fn_test_data_traits!(Loc);
 
     #[test]
     fn test_head() {

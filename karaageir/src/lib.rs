@@ -18,7 +18,7 @@ impl Value {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Expr {
     Immediate(Value),
 }
@@ -31,13 +31,13 @@ impl Expr {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Stmt {
     Dump(Expr),
     Return(Expr),
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Eq, PartialEq, Default)]
 pub struct Function {
     pub body: Vec<Stmt>,
 }
@@ -48,7 +48,7 @@ impl Function {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Eq, PartialEq, Default)]
 pub struct IR<'a> {
     pub functions: HashMap<&'a str, Function>,
 }
@@ -69,5 +69,5 @@ mod tests {
     use crate::*;
     use karaage_asserts::*;
 
-    fn_test_send_sync!(IR);
+    fn_test_data_traits!(IR);
 }

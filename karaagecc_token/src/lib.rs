@@ -28,5 +28,5 @@ impl TokenKind {
 mod tests {
     use crate::*;
     use karaage_asserts::*;
-    fn_test_send_sync!(Token);
+    fn_test_data_traits!(Token);
 }

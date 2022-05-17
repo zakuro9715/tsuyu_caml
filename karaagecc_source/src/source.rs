@@ -46,7 +46,7 @@ mod tests {
     use super::*;
     use karaage_asserts::*;
 
-    fn_test_send_sync!(Source);
+    fn_test_data_traits!(Source);
 
     #[test]
     fn test_inline() {
