@@ -9,10 +9,12 @@ use std::{
     path::{Path, PathBuf},
 };
 
+//impl fmt::Display for Path
+
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Source {
     pub path: Box<Path>,
-    pub code: Vec<char>,
+    pub code: String,
 }
 
 impl AsRef<Source> for Source {
@@ -26,13 +28,13 @@ impl Source {
         use nanoid::nanoid;
         Self {
             path: PathBuf::from(&format!("__inline{}", nanoid!())).into_boxed_path(),
-            code: code.into().chars().collect(),
+            code: code.into(),
         }
     }
 
     pub fn read_file(path: impl Into<PathBuf>) -> io::Result<Source> {
         fn inner(path: Box<Path>) -> io::Result<Source> {
-            let code = fs::read_to_string(&path)?.chars().collect();
+            let code = fs::read_to_string(&path)?;
             Ok(Source { path, code })
         }
         inner(path.into().into_boxed_path())
@@ -56,7 +58,7 @@ mod tests {
             .to_str()
             .unwrap()
             .contains("inline"));
-        assert_eq!(source.code, "abc".chars().collect::<Vec<_>>());
+        assert_eq!(source.code, "abc");
     }
 
     #[test]
@@ -65,7 +67,7 @@ mod tests {
         let source = Source::read_file(&path).unwrap();
         let code = fs::read_to_string(&path).unwrap();
         assert_eq!(source.path, path.into_boxed_path());
-        assert_eq!(source.code, code.chars().collect::<Vec<_>>());
+        assert_eq!(source.code, code);
         assert_ne!(source.code.len(), 0);
     }
 
