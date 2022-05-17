@@ -231,6 +231,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "karaagecc_chars"
+version = "0.1.0"
+
+[[package]]
 name = "karaagecc_cli"
 version = "0.1.0"
 dependencies = [
