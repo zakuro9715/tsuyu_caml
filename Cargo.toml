@@ -1,6 +1,6 @@
 [workspace]
 members = [
-  "cli",
+  "karaagecc_cli",
   "karaagecc",
   "karaagecc_error",
   "karaagecc_source",
