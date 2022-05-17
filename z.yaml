@@ -7,6 +7,7 @@ tasks:
   build: cargo build $@
   test: cargo test $@
   test.unit: cargo test $@ --tests
+  test.insta: cargo insta test -- --test integration
   test.review: cargo insta test --review
   test.cov: cargo tarpaulin $@
   fix: z lint fix && z fmt
