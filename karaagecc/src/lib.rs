@@ -14,11 +14,12 @@ use tempfile::TempDir;
 
 pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     let code = &source.as_ref().code;
-    let token = code
+    let code_text = code.into_iter().collect::<String>();
+    let token = code_text
         .trim()
         .parse::<i64>()
         .map(IntLiteral)
-        .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code)))
+        .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code_text)))
         .into_token(Loc::head());
     let value = match token.kind {
         IntLiteral(i) => Ok(i),
