@@ -85,38 +85,43 @@ pub fn is_hex_digit(c: Char<'_>) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::*;
+    use rstest::*;
 
-    #[test]
-    fn test_is_whitespace() {
-        for c in [" ", "\t", "\n", "\r"] {
-            assert!(is_whitespace(c.into()));
-        }
-        for c in ["a", "あ"] {
-            assert!(!is_whitespace(c.into()));
-        }
+    #[rstest]
+    fn test_whitespaces(#[values(" ", "\t", "\n", "\r")] c: &str) {
+        assert!(is_whitespace(c.into()));
     }
 
-    #[test]
-    fn test_is_digit() {
-        for c in ["0", "3", "7"] {
-            assert!(is_decimal_digit(c.into()));
-            assert!(is_hex_digit(c.into()));
-            assert!(is_octal_digit(c.into()));
-        }
-        for c in ["8", "9"] {
-            assert!(!is_octal_digit(c.into()));
-            assert!(is_decimal_digit(c.into()));
-            assert!(is_hex_digit(c.into()));
-        }
-        for c in ["a", "A", "f", "F"] {
-            assert!(!is_octal_digit(c.into()));
-            assert!(!is_decimal_digit(c.into()));
-            assert!(is_hex_digit(c.into()));
-        }
-        for c in ["g", "三"] {
-            assert!(!is_octal_digit(c.into()));
-            assert!(!is_decimal_digit(c.into()));
-            assert!(!is_hex_digit(c.into()));
-        }
+    #[rstest]
+    fn test_not_whitespaces(#[values("a", "あ")] c: &str) {
+        assert!(!is_whitespace(c.into()));
+    }
+
+    #[rstest]
+    fn test_octal_digits(#[values("0", "3", "7")] c: &str) {
+        assert!(is_decimal_digit(c.into()));
+        assert!(is_hex_digit(c.into()));
+        assert!(is_octal_digit(c.into()));
+    }
+
+    #[rstest]
+    fn test_decimal_digits(#[values("8", "9")] c: &str) {
+        assert!(!is_octal_digit(c.into()));
+        assert!(is_decimal_digit(c.into()));
+        assert!(is_hex_digit(c.into()));
+    }
+
+    #[rstest]
+    fn test_hex_digits(#[values("a", "A", "f", "F")] c: &str) {
+        assert!(!is_octal_digit(c.into()));
+        assert!(!is_decimal_digit(c.into()));
+        assert!(is_hex_digit(c.into()));
+    }
+
+    #[rstest]
+    fn test_not_digits(#[values("g", "三")] c: &str) {
+        assert!(!is_octal_digit(c.into()));
+        assert!(!is_decimal_digit(c.into()));
+        assert!(!is_hex_digit(c.into()));
     }
 }
