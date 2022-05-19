@@ -561,6 +561,7 @@ name = "karaagecc_chars"
 version = "0.1.0"
 dependencies = [
  "rstest",
+ "unicode-segmentation",
 ]
 
 [[package]]
@@ -1040,6 +1041,12 @@ checksum = "8d82e1a7758622a465f8cee077614c73484dac5b836c02ff6a40d5d1010324d7"
 dependencies = [
  "serde",
 ]
+
+[[package]]
+name = "unicode-segmentation"
+version = "1.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7e8820f5d777f6224dc4be3632222971ac30164d4a258d595640799554ebfd99"
 
 [[package]]
 name = "unicode-xid"
