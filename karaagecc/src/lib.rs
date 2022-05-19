@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-use karaagecc_error::{Error, Result};
+use karaagecc_error::{Error, ErrorKind::Message, Result};
 use karaagecc_source::{Loc, Source};
 use karaagecc_token::TokenKind::{self, IntLiteral};
 use karaageir::{Expr, Stmt, IR};
@@ -22,7 +22,7 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
         .into_token(Loc::head());
     let value = match token.kind {
         IntLiteral(i) => Ok(i),
-        TokenKind::Error(message) => Err(Error::from_message(message)),
+        TokenKind::Error(message) => Err(Error::new(Message(message))),
     }?;
 
     let mut ir = IR::new();

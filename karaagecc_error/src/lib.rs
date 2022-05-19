@@ -3,12 +3,20 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-use karaagecc_source::Loc;
 use std::fmt;
+use thiserror::Error;
 
-#[derive(PartialEq, Eq, Debug, Clone, Default)]
+use karaagecc_source::Loc;
+
+#[derive(Error, Debug, Eq, PartialEq, Clone)]
+pub enum ErrorKind {
+    #[error("{0}")]
+    Message(String),
+}
+
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Error {
-    pub message: String,
+    pub kind: ErrorKind,
     pub loc: Option<Loc>,
 }
 
@@ -16,10 +24,9 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let msg = &self.message;
         match &self.loc {
-            Some(loc) => write!(f, "{}:{} {}", loc.line, loc.column, msg),
-            _ => write!(f, "{}", msg),
+            Some(loc) => write!(f, "{}:{} {}", loc.line, loc.column, self.kind),
+            _ => write!(f, "{}", self.kind),
         }
     }
 }
@@ -27,21 +34,12 @@ impl fmt::Display for Error {
 impl std::error::Error for Error {}
 
 impl Error {
-    pub fn new() -> Self {
-        Self::default()
+    pub fn new(kind: ErrorKind) -> Self {
+        Self { kind, loc: None }
     }
 
-    pub fn from_message(msg: impl Into<String>) -> Self {
-        Self::new().with_message(msg)
-    }
-
-    pub fn with_message(mut self, msg: impl Into<String>) -> Self {
-        self.message = msg.into();
-        self
-    }
-
-    pub fn with_loc(mut self, loc: impl Into<Loc>) -> Self {
-        self.loc = Some(loc.into());
+    pub fn with_loc(mut self, loc: Loc) -> Self {
+        self.loc = Some(loc);
         self
     }
 }
@@ -57,27 +55,14 @@ mod tests {
 
     #[test]
     fn test_new_error() {
-        let mut err = Error::new();
-        assert_eq!(
-            err,
-            Error {
-                message: String::default(),
-                loc: None,
-            },
-        );
-
-        let msg = "message";
-        err = err.with_message(msg);
-        assert_eq!(err, Error::from_message(msg));
+        use ErrorKind::*;
+        let msg = "message".to_string();
+        assert_eq!(format!("{}", Error::new(Message(msg.clone()))), msg);
 
         let loc = Loc::new(0, 2, 1, 1);
-        err = err.with_loc(&loc);
         assert_eq!(
-            err,
-            Error {
-                message: msg.to_string(),
-                loc: Some(loc),
-            },
+            format!("{}", Error::new(Message(msg.clone())).with_loc(loc.clone())),
+            format!("{}:{} {}", loc.line, loc.column, msg),
         );
     }
 }
