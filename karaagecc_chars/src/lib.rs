@@ -7,17 +7,15 @@
 use std::{fmt, hash::Hash};
 
 #[derive(Clone, Copy, Eq, PartialEq, Hash)]
-pub struct Char<'a> {
-    raw: &'a str,
-}
+pub struct Char<'a>(&'a str);
 
 impl<'a> Char<'a> {
     fn byte(&self) -> u8 {
-        self.raw.bytes().next().expect("Char is broken")
+        self.0.bytes().next().expect("Char is broken")
     }
 
     pub fn char(&self) -> char {
-        self.raw.chars().next().expect("Char is broken")
+        self.0.chars().next().expect("Char is broken")
     }
 
     pub fn ascii(&self) -> Option<u8> {
@@ -33,8 +31,8 @@ impl<'a> Char<'a> {
 // --- traits ---
 
 impl<'a> From<&'a str> for Char<'a> {
-    fn from(raw: &'a str) -> Self {
-        Self { raw }
+    fn from(s: &'a str) -> Self {
+        Self(s)
     }
 }
 
@@ -46,13 +44,13 @@ fn test_from_str() {
 
 impl<'a> fmt::Display for Char<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.raw.fmt(f)
+        self.0.fmt(f)
     }
 }
 
 impl<'a> fmt::Debug for Char<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.raw.fmt(f)
+        self.0.fmt(f)
     }
 }
 
