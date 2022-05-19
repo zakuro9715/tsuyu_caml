@@ -28,7 +28,7 @@ impl<'a> Iterator for Chars<'a> {
     }
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.graphemes.next().map(Char)
+        self.graphemes.next().map(Char::from)
     }
 }
 
@@ -49,7 +49,7 @@ mod tests {
     fn test_iter(#[case] text: &str, #[case] char_strs: Vec<&str>) {
         assert_eq!(
             Chars::from(text).collect::<Vec<_>>(),
-            char_strs.iter().map(|c| Char(c)).collect::<Vec<_>>(),
+            char_strs.into_iter().map(Char::from).collect::<Vec<_>>(),
         );
     }
 }

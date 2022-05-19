@@ -7,7 +7,7 @@
 use std::{fmt, hash::Hash};
 
 #[derive(Clone, Copy, Eq, PartialEq, Hash)]
-pub struct Char<'a>(pub &'a str);
+pub struct Char<'a>(&'a str);
 
 impl<'a> Char<'a> {
     fn byte(&self) -> u8 {
