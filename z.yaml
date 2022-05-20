@@ -6,6 +6,8 @@ tasks:
   run: cargo run $@
   build: cargo build $@
   test: cargo test $@
+  test.package: cargo test -p $@
+  test.p: z test.package $@
   test.unit: cargo test $@ --tests
   test.insta: cargo insta test -- --test integration
   test.review: cargo insta test --review
