@@ -41,15 +41,13 @@ impl<'a> From<&'a str> for Chars<'a> {
 #[cfg(test)]
 mod tests {
     use crate::*;
+    use karaage_asserts::*;
     use rstest::*;
 
     #[rstest]
     #[case("abcd", vec!["a", "b", "c", "d"])]
     #[case("あa\n🐈a̐", vec!["あ", "a", "\n", "🐈", "a̐"])]
     fn test_iter(#[case] text: &str, #[case] char_strs: Vec<&str>) {
-        assert_eq!(
-            Chars::from(text).collect::<Vec<_>>(),
-            char_strs.into_iter().map(Char::from).collect::<Vec<_>>(),
-        );
+        assert_iter_eq!(Chars::from(text), char_strs);
     }
 }

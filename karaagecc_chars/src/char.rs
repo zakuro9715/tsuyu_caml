@@ -137,6 +137,7 @@ pub fn is_hex_digit(c: Char<'_>) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::*;
+    use karaage_asserts::*;
     use rstest::*;
 
     #[rstest]

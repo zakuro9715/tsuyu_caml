@@ -567,6 +567,7 @@ dependencies = [
 name = "karaagecc_chars"
 version = "0.1.0"
 dependencies = [
+ "karaage_asserts",
  "rstest",
  "unicode-segmentation",
 ]

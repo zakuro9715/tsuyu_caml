@@ -82,6 +82,7 @@ impl Code {
     pub fn new() -> Self {
         Default::default()
     }
+
     pub fn chars(&self) -> Chars<'_> {
         Chars::from(self.s.as_str())
     }
@@ -112,9 +113,10 @@ mod tests {
     #[test]
     fn test_chars() {
         use karaagecc_chars::Char;
-        assert_eq!(
-            Code::from("abc").chars().collect::<Vec<_>>(),
+        let code = Code::from("abc");
+        assert_iter_eq!(
+            code.chars(),
             [Char::from("a"), Char::from("b"), Char::from("c")],
-        )
+        );
     }
 }

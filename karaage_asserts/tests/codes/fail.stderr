@@ -27,3 +27,23 @@ note: required by a bound in `assert_impl_copy`
   |     |                         |
   |     |                         required by this bound in `assert_impl_copy`
   |     required by a bound in this
+
+error[E0277]: can't compare `usize` with `String`
+ --> tests/codes/fail.rs:7:5
+  |
+7 |     assert_iter_eq!(Vec::<usize>::new(), Vec::<String>::new());
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `usize == String`
+  |
+  = help: the trait `PartialEq<String>` is not implemented for `usize`
+  = note: required because of the requirements on the impl of `PartialEq<Vec<String>>` for `Vec<usize>`
+  = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: can't compare `usize` with `String`
+ --> tests/codes/fail.rs:8:5
+  |
+8 |     assert_iter_ne!(Vec::<usize>::new(), Vec::<String>::new());
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `usize == String`
+  |
+  = help: the trait `PartialEq<String>` is not implemented for `usize`
+  = note: required because of the requirements on the impl of `PartialEq<Vec<String>>` for `Vec<usize>`
+  = note: this error originates in the macro `assert_ne` (in Nightly builds, run with -Z macro-backtrace for more info)
