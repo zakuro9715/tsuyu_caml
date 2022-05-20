@@ -5,7 +5,8 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 mod source;
-pub use crate::source::*;
-
+pub use source::*;
+mod code;
+pub use code::*;
 mod loc;
-pub use crate::loc::*;
+pub use loc::*;

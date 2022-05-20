@@ -15,6 +15,7 @@ use tempfile::TempDir;
 pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     let code = &source.as_ref().code;
     let token = code
+        .to_string()
         .trim()
         .parse::<i64>()
         .map(IntLiteral)
