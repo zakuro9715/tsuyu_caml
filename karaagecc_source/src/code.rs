@@ -81,6 +81,10 @@ impl Code {
         Chars::from(self.s.as_str())
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.s.is_empty()
+    }
+
     pub fn len(&self) -> usize {
         self.s.len()
     }
@@ -100,7 +104,9 @@ mod tests {
 
     #[test]
     fn test_len() {
+        assert!(Code::new().is_empty());
         assert_eq!(Code::new().len(), 0);
+        assert!(!Code::from("abc").is_empty());
         assert_eq!(Code::from("abc").len(), 3);
     }
 
