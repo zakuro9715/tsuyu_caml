@@ -5,7 +5,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use crate::Char;
-use std::{fmt, hash::Hash, marker::PhantomData};
+
 use unicode_segmentation::{Graphemes, UnicodeSegmentation};
 
 pub struct Chars<'a> {

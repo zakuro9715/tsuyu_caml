@@ -32,17 +32,11 @@ macro_rules! impl_code_eq {
             fn eq(&self, other: &$other) -> bool {
                 PartialEq::eq(&self.s, other)
             }
-            fn ne(&self, other: &$other) -> bool {
-                PartialEq::ne(&self.s, other)
-            }
         }
 
         #[allow(unused_lifetimes)]
         impl<'a> PartialEq<Code> for $other {
             fn eq(&self, other: &Code) -> bool {
-                PartialEq::eq(self, &other.s)
-            }
-            fn ne(&self, other: &Code) -> bool {
                 PartialEq::eq(self, &other.s)
             }
         }

@@ -49,17 +49,11 @@ macro_rules! impl_code_eq {
             fn eq(&self, other: &$other) -> bool {
                 PartialEq::eq(&self.0, other)
             }
-            fn ne(&self, other: &$other) -> bool {
-                PartialEq::ne(&self.0, other)
-            }
         }
 
         #[allow(unused_lifetimes)]
         impl<'a> PartialEq<Char<'_>> for $other {
-            fn eq(&self, other: &Char) -> bool {
-                PartialEq::eq(self, &other.0)
-            }
-            fn ne(&self, other: &Char) -> bool {
+            fn eq(&self, other: &Char<'_>) -> bool {
                 PartialEq::eq(self, &other.0)
             }
         }
@@ -70,19 +64,14 @@ impl PartialEq<str> for Char<'_> {
     fn eq(&self, other: &str) -> bool {
         PartialEq::eq(self.0, other)
     }
-    fn ne(&self, other: &str) -> bool {
-        PartialEq::ne(self.0, other)
-    }
 }
 
 impl PartialEq<Char<'_>> for str {
-    fn eq(&self, other: &Char) -> bool {
-        PartialEq::eq(self, other.0)
-    }
-    fn ne(&self, other: &Char) -> bool {
+    fn eq(&self, other: &Char<'_>) -> bool {
         PartialEq::eq(self, other.0)
     }
 }
+
 impl_code_eq! {String}
 impl_code_eq! {&'a str}
 
@@ -137,7 +126,7 @@ pub fn is_hex_digit(c: Char<'_>) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use karaage_asserts::*;
+
     use rstest::*;
 
     #[rstest]
