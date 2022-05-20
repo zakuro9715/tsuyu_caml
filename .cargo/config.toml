@@ -1,2 +1,2 @@
 [build]
-rustflags="-W rust-2018-idioms"
+rustflags=["-W", "rust-2018-idioms"]

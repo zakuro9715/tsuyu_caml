@@ -1,0 +1,37 @@
+error[E0277]: the trait bound `Empty: Clone` is not satisfied
+  --> tests/codes/fail.rs:6:26
+   |
+6  |     assert_data_traits::<Empty>();
+   |                          ^^^^^ the trait `Clone` is not implemented for `Empty`
+   |
+note: required by a bound in `karaage_asserts::assert_data_traits`
+  --> src/lib.rs
+   |
+   | pub fn assert_data_traits<T: Send + Sync + Clone + Eq + PartialEq + Debug>() {}
+   |                                            ^^^^^ required by this bound in `karaage_asserts::assert_data_traits`
+
+error[E0277]: the trait bound `Empty: Eq` is not satisfied
+  --> tests/codes/fail.rs:6:26
+   |
+6  |     assert_data_traits::<Empty>();
+   |                          ^^^^^ the trait `Eq` is not implemented for `Empty`
+   |
+note: required by a bound in `karaage_asserts::assert_data_traits`
+  --> src/lib.rs
+   |
+   | pub fn assert_data_traits<T: Send + Sync + Clone + Eq + PartialEq + Debug>() {}
+   |                                                    ^^ required by this bound in `karaage_asserts::assert_data_traits`
+
+error[E0277]: `Empty` doesn't implement `Debug`
+  --> tests/codes/fail.rs:6:26
+   |
+6  |     assert_data_traits::<Empty>();
+   |                          ^^^^^ `Empty` cannot be formatted using `{:?}`
+   |
+   = help: the trait `Debug` is not implemented for `Empty`
+   = note: add `#[derive(Debug)]` to `Empty` or manually `impl Debug for Empty`
+note: required by a bound in `karaage_asserts::assert_data_traits`
+  --> src/lib.rs
+   |
+   | pub fn assert_data_traits<T: Send + Sync + Clone + Eq + PartialEq + Debug>() {}
+   |                                                                     ^^^^^ required by this bound in `karaage_asserts::assert_data_traits`
