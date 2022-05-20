@@ -42,6 +42,60 @@ fn test_from_str() {
     assert_eq!(Char::from(c.to_string().as_str()).char(), c)
 }
 
+macro_rules! impl_code_eq {
+    ($other: ty) => {
+        #[allow(unused_lifetimes)]
+        impl<'a> PartialEq<$other> for Char<'_> {
+            fn eq(&self, other: &$other) -> bool {
+                PartialEq::eq(&self.0, other)
+            }
+            fn ne(&self, other: &$other) -> bool {
+                PartialEq::ne(&self.0, other)
+            }
+        }
+
+        #[allow(unused_lifetimes)]
+        impl<'a> PartialEq<Char<'_>> for $other {
+            fn eq(&self, other: &Char) -> bool {
+                PartialEq::eq(self, &other.0)
+            }
+            fn ne(&self, other: &Char) -> bool {
+                PartialEq::eq(self, &other.0)
+            }
+        }
+    };
+}
+
+impl PartialEq<str> for Char<'_> {
+    fn eq(&self, other: &str) -> bool {
+        PartialEq::eq(self.0, other)
+    }
+    fn ne(&self, other: &str) -> bool {
+        PartialEq::ne(self.0, other)
+    }
+}
+
+impl PartialEq<Char<'_>> for str {
+    fn eq(&self, other: &Char) -> bool {
+        PartialEq::eq(self, other.0)
+    }
+    fn ne(&self, other: &Char) -> bool {
+        PartialEq::eq(self, other.0)
+    }
+}
+impl_code_eq! {String}
+impl_code_eq! {&'a str}
+
+#[test]
+fn test_char_eq_ne() {
+    assert_eq!("🐈", Char::from("🐈"));
+    assert_ne!("🐈", Char::from("🐶"));
+    assert_eq!(*"🐈", Char::from("🐈"));
+    assert_ne!(*"🐈", Char::from("🐶"));
+    assert_eq!("🐈".to_string(), Char::from("🐈"));
+    assert_ne!("🐈".to_string(), Char::from("🐶"));
+}
+
 impl<'a> fmt::Display for Char<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(f)
