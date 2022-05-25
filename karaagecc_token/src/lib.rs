@@ -24,9 +24,26 @@ impl TokenKind {
     }
 }
 
+impl Token {
+    pub fn new(kind: TokenKind, loc: Loc) -> Self {
+        Self { kind, loc }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::*;
     use karaage_asserts::*;
     fn_test_data_traits!(Token);
+
+    #[test]
+    fn test_new() {
+        assert_eq!(
+            Token::new(TokenKind::IntLiteral(42), Loc::head()),
+            Token {
+                kind: TokenKind::IntLiteral(42),
+                loc: Loc::head(),
+            }
+        )
+    }
 }
