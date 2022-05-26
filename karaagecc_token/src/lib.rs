@@ -12,16 +12,31 @@ pub enum TokenKind {
     Error(String),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Token {
-    pub kind: TokenKind,
-    pub loc: Loc,
-}
-
 impl TokenKind {
     pub fn into_token(self, loc: Loc) -> Token {
         Token { kind: self, loc }
     }
+}
+
+#[cfg(test)]
+mod token_kind_tests {
+    use crate::{TokenKind::*, *};
+    #[test]
+    fn test_into_token() {
+        let kind = IntLiteral(42);
+        let loc = Loc::head();
+        let expected = Token {
+            kind: kind.clone(),
+            loc: loc.clone(),
+        };
+        assert_eq!(kind.into_token(loc), expected);
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Token {
+    pub kind: TokenKind,
+    pub loc: Loc,
 }
 
 impl Token {
