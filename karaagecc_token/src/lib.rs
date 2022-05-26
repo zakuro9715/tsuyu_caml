@@ -69,8 +69,15 @@ impl Token {
     }
 }
 
+#[macro_export]
+macro_rules! token {
+    ($v:expr, $loc:expr) => {
+        TokenKind::from($v).into_token($loc)
+    };
+}
+
 #[cfg(test)]
-mod tests {
+mod token_tests {
     use crate::*;
     use karaage_asserts::*;
     fn_test_data_traits!(Token);
@@ -83,6 +90,14 @@ mod tests {
                 kind: TokenKind::IntLiteral(42),
                 loc: Loc::head(),
             }
+        )
+    }
+
+    #[test]
+    fn test_token_macro() {
+        assert_eq!(
+            token!(42, Loc::head()),
+            Token::new(TokenKind::IntLiteral(42), Loc::head()),
         )
     }
 }
