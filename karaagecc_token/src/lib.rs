@@ -18,6 +18,25 @@ impl TokenKind {
     }
 }
 
+macro_rules! impl_from_for_token_kind {
+    ($variant:ident ( $t:ty )) => {
+        impl From<$t> for TokenKind {
+            fn from(v: $t) -> Self {
+                TokenKind::$variant(v)
+            }
+        }
+    };
+    ($( $variant:ident ( $t:tt ) ),+ $(,)? ) => {
+        $(
+            impl_from_for_token_kind!{$variant ( $t )}
+        )+
+    };
+}
+
+impl_from_for_token_kind! {
+    IntLiteral(i64),
+}
+
 #[cfg(test)]
 mod token_kind_tests {
     use crate::{TokenKind::*, *};
@@ -30,6 +49,11 @@ mod token_kind_tests {
             loc: loc.clone(),
         };
         assert_eq!(kind.into_token(loc), expected);
+    }
+
+    #[test]
+    fn test_token_kind_from() {
+        assert_eq!(TokenKind::from(42), IntLiteral(42));
     }
 }
 
