@@ -61,7 +61,7 @@ mod tests {
 
         let loc = Loc::new(0, 2, 1, 1);
         assert_eq!(
-            format!("{}", Error::new(Message(msg.clone())).with_loc(loc.clone())),
+            format!("{}", Error::new(Message(msg.clone())).with_loc(loc)),
             format!("{}:{} {}", loc.line, loc.column, msg),
         );
     }

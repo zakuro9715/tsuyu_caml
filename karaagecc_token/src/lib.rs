@@ -48,7 +48,7 @@ mod token_kind_tests {
         let loc = Loc::head();
         let expected = Token {
             kind: kind.clone(),
-            loc: loc.clone(),
+            loc,
         };
         assert_eq!(kind.into_token(loc), expected);
     }

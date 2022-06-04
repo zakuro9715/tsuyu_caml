@@ -30,6 +30,10 @@ impl<'a> Char<'a> {
     pub fn len(&self) -> usize {
         self.0.len()
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
 }
 
 // --- traits ---
@@ -142,6 +146,12 @@ mod tests {
     fn test_len() {
         assert_eq!(Char::from("a").len(), 'a'.len_utf8());
         assert_eq!(Char::from("🐈").len(), '🐈'.len_utf8());
+    }
+
+    #[test]
+    fn test_is_empty() {
+        assert!(!Char::from("a").is_empty());
+        assert!(!Char::from("🐈").is_empty());
     }
 
     #[rstest]
