@@ -6,7 +6,7 @@
 
 use std::{borrow::ToOwned, cmp, fmt};
 
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Copy)]
 pub struct Loc {
     pub index: usize,
     pub len: usize,
