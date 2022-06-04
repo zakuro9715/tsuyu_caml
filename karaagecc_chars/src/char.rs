@@ -79,16 +79,6 @@ impl PartialEq<Char<'_>> for str {
 impl_code_eq! {String}
 impl_code_eq! {&'a str}
 
-#[test]
-fn test_char_eq_ne() {
-    assert_eq!("🐈", Char::from("🐈"));
-    assert_ne!("🐈", Char::from("🐶"));
-    assert_eq!(*"🐈", Char::from("🐈"));
-    assert_ne!(*"🐈", Char::from("🐶"));
-    assert_eq!("🐈".to_string(), Char::from("🐈"));
-    assert_ne!("🐈".to_string(), Char::from("🐶"));
-}
-
 impl<'a> fmt::Display for Char<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(f)
@@ -99,14 +89,6 @@ impl<'a> fmt::Debug for Char<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(f)
     }
-}
-
-#[test]
-fn test_fmtr() {
-    let s = "🐈";
-    let c = Char::from(s);
-    assert_eq!(format!("{}", c), format!("{}", s));
-    assert_eq!(format!("{:?}", c), format!("{:?}", s));
 }
 
 // --- traits end --
@@ -130,8 +112,37 @@ pub fn is_hex_digit(c: Char<'_>) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::*;
-
     use rstest::*;
+
+    #[test]
+    fn test_char_eq_ne() {
+        assert_eq!("🐈", Char::from("🐈"));
+        assert_ne!("🐈", Char::from("🐶"));
+        assert_eq!(*"🐈", Char::from("🐈"));
+        assert_ne!(*"🐈", Char::from("🐶"));
+        assert_eq!("🐈".to_string(), Char::from("🐈"));
+        assert_ne!("🐈".to_string(), Char::from("🐶"));
+    }
+
+    #[test]
+    fn test_fmt() {
+        let s = "🐈";
+        let c = Char::from(s);
+        assert_eq!(format!("{}", c), format!("{}", s));
+        assert_eq!(format!("{:?}", c), format!("{:?}", s));
+    }
+
+    #[test]
+    fn test_char() {
+        assert_eq!(Char::from("a").char(), 'a');
+        assert_eq!(Char::from("🐈").char(), '🐈');
+    }
+
+    #[test]
+    fn test_len() {
+        assert_eq!(Char::from("a").len(), 'a'.len_utf8());
+        assert_eq!(Char::from("🐈").len(), '🐈'.len_utf8());
+    }
 
     #[rstest]
     fn test_whitespaces(#[values(" ", "\t", "\n", "\r")] c: &str) {
