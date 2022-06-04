@@ -26,6 +26,10 @@ impl<'a> Char<'a> {
             None
         }
     }
+
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
 }
 
 // --- traits ---
