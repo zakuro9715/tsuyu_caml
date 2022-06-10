@@ -14,6 +14,18 @@ pub struct Loc {
     pub column: usize,
 }
 
+#[macro_export]
+macro_rules! loc {
+    ($begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
+        $crate::Loc {
+            index: $begin,
+            len: $end - $begin,
+            line: $line,
+            column: $column,
+        }
+    };
+}
+
 impl Default for Loc {
     fn default() -> Self {
         Self {
@@ -91,8 +103,24 @@ mod tests {
                 index: 1,
                 len: 1,
                 line: 2,
-                column: 3
-            }
+                column: 3,
+            },
+        );
+        assert_eq!(
+            loc! {2,3; 1,2},
+            Loc {
+                index: 2,
+                len: 1,
+                line: 1,
+                column: 2,
+            },
+        );
+        assert_eq!(
+            loc! {2,3; 1,2},
+            loc! {
+                2,3;
+                1,2;
+            },
         );
     }
 
