@@ -7,11 +7,18 @@ pub use paste::paste;
 
 #[macro_export]
 macro_rules! assert_iter_eq {
-    ($lhs:expr, $rhs:expr $(,)?) => {
+    ($lhs:expr, $rhs:expr $(,)?) => {{
         let lhs = $lhs.into_iter().collect::<Vec<_>>();
         let rhs = $rhs.into_iter().collect::<Vec<_>>();
-        assert_eq!(lhs, rhs);
-    };
+        if !lhs.is_empty() || rhs.is_empty() {
+            for i in 1..(std::cmp::min(lhs.len(), rhs.len())) {
+                assert_eq!(lhs[i], rhs[i]);
+            }
+            assert_eq!(lhs.len(), rhs.len());
+        } else {
+            assert_eq!(lhs, rhs); // By put this line at end, show `Lhs == Rhs` error at last for readable error.
+        }
+    }};
 }
 
 #[macro_export]

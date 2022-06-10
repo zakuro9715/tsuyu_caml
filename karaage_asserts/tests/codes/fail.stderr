@@ -28,6 +28,14 @@ note: required by a bound in `assert_impl_copy`
   |     |                         required by this bound in `assert_impl_copy`
   |     required by a bound in this
 
+error[E0308]: mismatched types
+ --> tests/codes/fail.rs:7:5
+  |
+7 |     assert_iter_eq!(Vec::<usize>::new(), Vec::<String>::new());
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `usize`, found struct `String`
+  |
+  = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+
 error[E0277]: can't compare `usize` with `String`
  --> tests/codes/fail.rs:7:5
   |
