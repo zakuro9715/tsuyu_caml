@@ -6,6 +6,7 @@ members = [
   "karaagecc_error",
   "karaagecc_source",
   "karaagecc_token",
+  "karaagecc_lexer",
   "karaageir",
   "karaageir_codegen",
   "karaage_asserts",

@@ -591,6 +591,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "karaagecc_lexer"
+version = "0.1.0"
+dependencies = [
+ "karaage_asserts",
+ "karaagecc_chars",
+ "karaagecc_error",
+ "karaagecc_source",
+ "karaagecc_token",
+]
+
+[[package]]
 name = "karaagecc_source"
 version = "0.1.0"
 dependencies = [
