@@ -101,6 +101,10 @@ pub fn is_whitespace(c: Char<'_>) -> bool {
     c.char().is_whitespace()
 }
 
+pub fn is_newline(c: Char<'_>) -> bool {
+    matches!(c.char(), '\n' | '\r')
+}
+
 pub fn is_octal_digit(c: Char<'_>) -> bool {
     (b'0'..b'8').contains(&c.byte())
 }
@@ -162,6 +166,17 @@ mod tests {
     #[rstest]
     fn test_not_whitespaces(#[values("a", "あ")] c: &str) {
         assert!(!is_whitespace(c.into()));
+    }
+
+    #[rstest]
+    fn test_newline(#[values("\n", "\r")] c: &str) {
+        assert!(is_newline(c.into()));
+        assert!(is_whitespace(c.into()));
+    }
+
+    #[rstest]
+    fn test_not_newline(#[values(" ", "\t")] c: &str) {
+        assert!(!is_newline(c.into()));
     }
 
     #[rstest]
