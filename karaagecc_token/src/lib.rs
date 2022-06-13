@@ -6,6 +6,7 @@
 
 use std::iter::Peekable;
 
+use karaage_utils::impl_from_for_enum;
 use karaagecc_source::Loc;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -20,23 +21,10 @@ impl TokenKind {
     }
 }
 
-macro_rules! impl_from_for_token_kind {
-    ($variant:ident ( $t:ty )) => {
-        impl From<$t> for TokenKind {
-            fn from(v: $t) -> Self {
-                TokenKind::$variant(v)
-            }
-        }
-    };
-    ($( $variant:ident ( $t:tt ) ),+ $(,)? ) => {
-        $(
-            impl_from_for_token_kind!{$variant ( $t )}
-        )+
-    };
-}
-
-impl_from_for_token_kind! {
-    IntLiteral(i64),
+impl_from_for_enum! {
+    TokenKind {
+        IntLiteral(i64),
+    }
 }
 
 #[cfg(test)]

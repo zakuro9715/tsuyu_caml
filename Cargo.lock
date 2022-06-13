@@ -550,6 +550,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "karaage_utils"
+version = "0.1.0"
+
+[[package]]
 name = "karaagecc"
 version = "0.1.0"
 dependencies = [
@@ -623,6 +627,7 @@ name = "karaagecc_token"
 version = "0.1.0"
 dependencies = [
  "karaage_asserts",
+ "karaage_utils",
  "karaagecc_source",
 ]
 

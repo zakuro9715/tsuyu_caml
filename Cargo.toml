@@ -11,4 +11,5 @@ members = [
   "karaageir",
   "karaageir_codegen",
   "karaage_asserts",
+  "karaage_utils",
 ]
