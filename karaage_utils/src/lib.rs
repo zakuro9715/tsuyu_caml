@@ -5,19 +5,19 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #[macro_export]
-macro_rules! impl_from_for_enum {
+macro_rules! derive_from {
     (
         $(
-            $enum:ty {
-                $( $variant:ident ( $t:tt ) ),+ $(,)?
+            $type:ty {
+                $( $func:ident ( $value_type:tt ) ),+ $(,)?
             }
         )+
     ) => {
         $(
             $(
-                impl From<$t> for $enum {
-                    fn from(v: $t) -> Self {
-                        <$enum>::$variant(v)
+                impl From<$value_type> for $type {
+                    fn from(v: $value_type) -> Self {
+                        <$type>::$func(v)
                      }
                 }
             )+
@@ -30,7 +30,23 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_impl_from_for_enum() {
+    fn test_derive_from_for_struct_new() {
+        #[derive(PartialEq, Eq, Debug)]
+        struct Data {
+            n: i32,
+        }
+        impl Data {
+            pub fn new(n: i32) -> Self {
+                Self { n }
+            }
+        }
+        derive_from! {
+            Data { new(i32) }
+        }
+        assert_eq!(Data::from(2), Data::new(2));
+    }
+    #[test]
+    fn test_derive_from_for_enum() {
         #[derive(PartialEq, Eq, Debug)]
         enum Value {
             Int32(i32),
@@ -39,7 +55,7 @@ mod tests {
             #[allow(dead_code)]
             OtherBool(bool),
         }
-        impl_from_for_enum! {
+        derive_from! {
             Value {
                 Int32(i32),
                 Int64(i64),
@@ -53,7 +69,7 @@ mod tests {
     }
 
     #[test]
-    fn test_impl_from_for_enum_multiple() {
+    fn test_derive_from_for_enum_multiple() {
         #[derive(PartialEq, Eq, Debug)]
         enum Num32 {
             Int(i32),
@@ -69,7 +85,7 @@ mod tests {
             OtherInt(i64),
         }
 
-        impl_from_for_enum! {
+        derive_from! {
             Num32 {
                 Int(i32),
                 UInt(u32),

@@ -6,7 +6,7 @@
 
 use std::iter::Peekable;
 
-use karaage_utils::impl_from_for_enum;
+use karaage_utils::derive_from;
 use karaagecc_source::Loc;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -21,7 +21,7 @@ impl TokenKind {
     }
 }
 
-impl_from_for_enum! {
+derive_from! {
     TokenKind {
         IntLiteral(i64),
     }
