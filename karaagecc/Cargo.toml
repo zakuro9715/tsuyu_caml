@@ -8,6 +8,7 @@ tempfile = "3.3.0"
 karaagecc_error = { path = "../karaagecc_error" }
 karaagecc_source = { path = "../karaagecc_source" }
 karaagecc_token = { path = "../karaagecc_token" }
+karaagecc_ast = { path = "../karaagecc_ast" }
 karaageir = { path = "../karaageir" }
 karaageir_codegen = { path = "../karaageir_codegen" }
 

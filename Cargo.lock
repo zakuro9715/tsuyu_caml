@@ -554,6 +554,7 @@ name = "karaagecc"
 version = "0.1.0"
 dependencies = [
  "insta",
+ "karaagecc_ast",
  "karaagecc_error",
  "karaagecc_source",
  "karaagecc_token",
@@ -561,6 +562,13 @@ dependencies = [
  "karaageir_codegen",
  "serde",
  "tempfile",
+]
+
+[[package]]
+name = "karaagecc_ast"
+version = "0.1.0"
+dependencies = [
+ "karaagecc_source",
 ]
 
 [[package]]
