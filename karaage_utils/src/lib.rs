@@ -22,11 +22,30 @@ impl<T, E> IntoOption<T> for Result<T, E> {
     }
 }
 
+pub trait IntoResult<T, E> {
+    fn ok(self) -> Result<T, E>;
+}
+
+impl<T> IntoResult<T, Option<T>> for Option<T> {
+    fn ok(self) -> Result<T, Option<T>> {
+        self.ok_or(None)
+    }
+}
+
+impl<T, E> IntoResult<T, E> for Result<T, E> {
+    fn ok(self) -> Result<T, E> {
+        self
+    }
+}
+
 #[macro_export]
 macro_rules! must {
-    ($expr:expr $(, $msg:expr)?) => {
-        $crate::IntoOption::ok($expr).unwrap_or_else(|| unreachable!($($msg)?))
-    }
+    ($expr:expr) => {
+        $crate::IntoResult::ok($expr).unwrap_or_else(|e| unreachable!("{:?}", e))
+    };
+    ($expr:expr , $msg:expr) => {
+        $crate::IntoOption::ok($expr).unwrap_or_else(|| unreachable!($msg))
+    };
 }
 
 #[cfg(test)]
@@ -47,7 +66,7 @@ mod must_tests {
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "None")]
     fn test_must_none() {
         must!(None)
     }
@@ -59,7 +78,7 @@ mod must_tests {
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic(expected = "10")]
     fn test_must_err() {
         must!(err(10))
     }
