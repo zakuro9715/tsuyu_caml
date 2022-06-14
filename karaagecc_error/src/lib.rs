@@ -4,13 +4,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 use std::fmt;
-use thiserror::Error;
 
+use karaage_utils::derives::{Display, Error};
 use karaagecc_source::Loc;
 
-#[derive(Error, Debug, Eq, PartialEq, Clone)]
+#[derive(Display, Debug, Eq, PartialEq, Clone)]
 pub enum ErrorKind {
-    #[error("{0}")]
     Message(String),
 }
 
@@ -26,7 +25,7 @@ impl From<&str> for ErrorKind {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, Clone)]
+#[derive(Error, PartialEq, Eq, Debug, Clone)]
 pub struct Error {
     pub kind: ErrorKind,
     pub loc: Option<Loc>,
@@ -42,8 +41,6 @@ impl fmt::Display for Error {
         }
     }
 }
-
-impl std::error::Error for Error {}
 
 impl Error {
     pub fn new(kind: ErrorKind) -> Self {
