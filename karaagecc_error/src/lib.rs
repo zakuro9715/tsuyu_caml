@@ -14,6 +14,18 @@ pub enum ErrorKind {
     Message(String),
 }
 
+impl From<String> for ErrorKind {
+    fn from(s: String) -> Self {
+        Self::Message(s)
+    }
+}
+
+impl From<&str> for ErrorKind {
+    fn from(s: &str) -> Self {
+        Self::Message(s.to_string())
+    }
+}
+
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Error {
     pub kind: ErrorKind,
@@ -44,6 +56,16 @@ impl Error {
     }
 }
 
+#[macro_export]
+macro_rules! error {
+    ($e:expr) => {
+        Error::new(ErrorKind::from($e))
+    };
+    ($e:expr, $loc:expr) => {
+        Error::new(ErrorKind::from($e)).with_loc($loc)
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use crate::*;
@@ -54,15 +76,27 @@ mod tests {
     fn_test_data_traits!(ResultString);
 
     #[test]
-    fn test_new_error() {
+    fn test_error() {
         use ErrorKind::*;
-        let msg = "message".to_string();
-        assert_eq!(format!("{}", Error::new(Message(msg.clone()))), msg);
+        assert_eq!(error!("123"), Error::new(Message("123".into())));
+        assert_eq!(error!("123".to_string()), Error::new(Message("123".into())));
+
+        let loc = Loc::new(2, 2, 1, 3);
+        assert_eq!(error!("123", loc).loc.unwrap(), loc);
+        assert_eq!(
+            error!("123", loc),
+            Error::new(Message("123".into())).with_loc(loc),
+        )
+    }
+
+    #[test]
+    fn test_error_format() {
+        assert_eq!(format!("{}", error!("abc")), "abc");
 
         let loc = Loc::new(0, 2, 1, 1);
         assert_eq!(
-            format!("{}", Error::new(Message(msg.clone())).with_loc(loc)),
-            format!("{}:{} {}", loc.line, loc.column, msg),
+            format!("{}", error!("efg", loc)),
+            format!("{}:{} {}", loc.line, loc.column, "efg"),
         );
     }
 }
