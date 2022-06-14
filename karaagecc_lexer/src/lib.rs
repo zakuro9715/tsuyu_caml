@@ -6,6 +6,7 @@
 
 use std::iter::Peekable;
 
+use karaage_utils::must;
 use karaagecc_chars::*;
 use karaagecc_source::{Loc, Source};
 use karaagecc_token::{Token, TokenKind, TokenReader};
@@ -103,7 +104,7 @@ impl<'a> Lexer<'a> {
         let mut value = 0;
         while let Some(c) = self.consume_if(is_decimal_digit) {
             value *= 10;
-            value += c.char().to_digit(10).unwrap_or_else(|| unreachable!());
+            value += must!(c.char().to_digit(10));
         }
         self.new_token(TokenKind::IntLiteral(value.into()))
     }

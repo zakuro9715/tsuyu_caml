@@ -607,6 +607,7 @@ name = "karaagecc_lexer"
 version = "0.1.0"
 dependencies = [
  "karaage_asserts",
+ "karaage_utils",
  "karaagecc_chars",
  "karaagecc_error",
  "karaagecc_source",

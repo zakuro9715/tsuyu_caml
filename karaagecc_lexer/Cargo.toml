@@ -10,6 +10,7 @@ karaagecc_error = { path = "../karaagecc_error" }
 karaagecc_token = { path = "../karaagecc_token" }
 karaagecc_chars = { path = "../karaagecc_chars" }
 karaagecc_source = { path = "../karaagecc_source" }
+karaage_utils = { path = "../karaage_utils" }
 
 [dev-dependencies]
 karaage_asserts = { path = "../karaage_asserts" }
