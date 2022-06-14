@@ -6,24 +6,19 @@
 
 use std::iter::Peekable;
 
-use karaage_utils::derive_from;
+use karaage_utils::derives::From;
 use karaagecc_source::Loc;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum TokenKind {
     IntLiteral(i64),
+    #[from(ignore)]
     Error(String),
 }
 
 impl TokenKind {
     pub fn into_token(self, loc: Loc) -> Token {
         Token { kind: self, loc }
-    }
-}
-
-derive_from! {
-    TokenKind {
-        IntLiteral(i64),
     }
 }
 
