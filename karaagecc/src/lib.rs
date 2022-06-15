@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-use karaagecc_ast as ast;
+use karaagecc_ast::{self as ast, stmt};
 use karaagecc_error::{Error, ErrorKind::Message, Result};
 use karaagecc_source::{Loc, Source};
 use karaagecc_token::TokenKind::{self, IntLiteral};
@@ -26,7 +26,7 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
         .into_token(Loc::head());
     let mut file = ast::File::new(source);
     file.stmts.push(match token.kind {
-        TokenKind::IntLiteral(n) => Ok(ast::Stmt::Expr(ast::Expr::IntLiteral(n))),
+        TokenKind::IntLiteral(n) => Ok(stmt! { int(n) }),
         TokenKind::Error(message) => Err(Error::new(Message(message))),
     }?);
 

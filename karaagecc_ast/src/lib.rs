@@ -43,3 +43,63 @@ mod file_tests {
         assert!(f.stmts.is_empty());
     }
 }
+
+#[macro_export]
+macro_rules! ast {
+    // root
+    (
+        $source:expr => [
+            $(
+                { $( $stmt:tt )* }
+            ),+ $(,)?
+        ]
+    ) => {
+        $crate::File{
+            source: $source,
+            stmts: vec![
+                $( $crate::stmt!($( $stmt )*) ),+
+            ]
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! stmt {
+    ($( $input:tt )* ) => {
+        $crate::Stmt::Expr($crate::expr!($( $input )*))
+    };
+}
+
+#[macro_export]
+macro_rules! expr {
+    (int ( $expr:expr )) => {
+        $crate::Expr::IntLiteral($expr)
+    };
+}
+
+#[cfg(test)]
+mod macro_tests {
+    use super::ast;
+    use crate as ast;
+    use karaagecc_source::Source;
+
+    #[test]
+    fn test_macro() {
+        let s = &Source::inline("1\n2");
+        assert_eq!(
+            ast! {
+                s => [
+                    { int(1) },
+                    { int(2) },
+                ]
+            },
+            ast::File {
+                source: s,
+                stmts: vec![
+                    ast::Stmt::Expr(ast::Expr::IntLiteral(1)),
+                    ast::Stmt::Expr(ast::Expr::IntLiteral(2)),
+                ],
+            }
+        );
+    }
+}
