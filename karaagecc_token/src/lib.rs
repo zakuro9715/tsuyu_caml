@@ -6,11 +6,47 @@
 
 use std::iter::Peekable;
 
-use karaage_utils::derives::From;
+use karaage_utils::{derives::From, paste};
 use karaagecc_source::Loc;
 
-#[derive(Debug, Clone, PartialEq, Eq, From)]
-pub enum TokenKind {
+macro_rules! define_token_kind {
+    (
+        $(
+            $( #[ $attr:meta ] )*
+            $variant:ident $( ( $( $field:ty ),+ ) )? ,
+        )+
+    ) => {
+        #[derive(Debug, Clone, PartialEq, Eq, From)]
+        pub enum TokenKind {
+            $(
+                $( #[ $attr ] )*
+                $variant $( ( $( $field ),+ ) )? ,
+            )+
+        }
+
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+        pub enum TokenKindKey {
+            $(
+                $variant ,
+            )+
+        }
+
+        impl TokenKind {
+            pub fn key(&self) -> TokenKindKey {
+                paste! {
+                    match self {
+                        $(
+                            Self::$variant $( ( $( [<__ $field:lower>]  ),+ ) )?
+                                => $crate::TokenKindKey::$variant,
+                        )+
+                    }
+                }
+            }
+        }
+    };
+}
+
+define_token_kind! {
     IntLiteral(i64),
     #[from(ignore)]
     Error(String),
@@ -52,12 +88,23 @@ impl Token {
     pub fn new(kind: TokenKind, loc: Loc) -> Self {
         Self { kind, loc }
     }
+
+    pub fn is(&self, kind: TokenKindKey) -> bool {
+        self.kind.key() == kind
+    }
 }
 
 #[macro_export]
 macro_rules! token {
     ($v:expr, $loc:expr) => {
         TokenKind::from($v).into_token($loc)
+    };
+}
+
+#[macro_export]
+macro_rules! token_kind {
+    ($name:ident) => {
+        paste! { TokenKindKey::[< $name:camel>] }
     };
 }
 
@@ -84,6 +131,12 @@ mod token_tests {
             token!(42, Loc::head()),
             Token::new(TokenKind::IntLiteral(42), Loc::head()),
         )
+    }
+
+    #[test]
+    fn test_token_kind() {
+        assert_eq!(token!(42, Loc::head()).kind.key(), token_kind!(int_literal));
+        assert!(token!(42, Loc::head()).is(token_kind!(int_literal)));
     }
 }
 
