@@ -573,6 +573,7 @@ name = "karaage_utils"
 version = "0.1.0"
 dependencies = [
  "derive_more",
+ "paste",
 ]
 
 [[package]]

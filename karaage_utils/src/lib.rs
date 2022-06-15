@@ -5,6 +5,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 pub use derive_more as derives;
+pub use paste::paste;
 
 pub trait IntoOption<T> {
     fn ok(self) -> Option<T>;
