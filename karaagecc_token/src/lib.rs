@@ -111,7 +111,7 @@ macro_rules! token_kind {
 #[cfg(test)]
 mod token_tests {
     use crate::*;
-    use karaage_asserts::*;
+    use karaage_asserts::{assert_eq, *};
     fn_test_data_traits!(Token);
 
     #[test]
@@ -170,7 +170,8 @@ impl<'a> TokenReader<'a> {
 #[cfg(test)]
 mod tokens_tests {
     use crate::*;
-    use karaage_asserts::*;
+    use karaage_asserts::{assert_eq, *};
+
     #[test]
     fn test_new_and_iter() {
         let tokens = [
@@ -183,8 +184,8 @@ mod tokens_tests {
     #[test]
     fn test_peek() {
         let t1 = token!(1, Loc::head());
-        let t2 = token!(1, Loc::head());
-        let t3 = token!(1, Loc::head());
+        let t2 = token!(2, Loc::head());
+        let t3 = token!(3, Loc::head());
         let mut tokens = TokenReader::new([t1.clone(), t2.clone(), t3.clone()].into_iter());
         assert_eq!(tokens.peek(), Some(&t1));
         assert_eq!(tokens.next(), Some(t1));

@@ -5,6 +5,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 pub use impls::impls;
 pub use paste::paste;
+pub use pretty_assertions::{assert_eq, assert_ne};
 
 #[macro_export]
 macro_rules! assert_iter_eq {
@@ -13,11 +14,12 @@ macro_rules! assert_iter_eq {
         let rhs = $rhs.into_iter().collect::<Vec<_>>();
         if !lhs.is_empty() || rhs.is_empty() {
             for i in 1..(std::cmp::min(lhs.len(), rhs.len())) {
-                assert_eq!(lhs[i], rhs[i]);
+                $crate::assert_eq!(lhs[i], rhs[i]);
             }
-            assert_eq!(lhs.len(), rhs.len());
+            $crate::assert_eq!(lhs.len(), rhs.len());
         } else {
-            assert_eq!(lhs, rhs); // By put this line at end, show `Lhs == Rhs` error at last for readable error.
+            // By put this line at end, show `Lhs == Rhs` error at last for readable error.
+            $crate::assert_eq!(lhs, rhs);
         }
     }};
 }
@@ -27,7 +29,7 @@ macro_rules! assert_iter_ne {
     ($lhs:expr, $rhs:expr) => {
         let lhs = $lhs.into_iter().collect::<Vec<_>>();
         let rhs = $rhs.into_iter().collect::<Vec<_>>();
-        assert_ne!(lhs, rhs);
+        $crate::assert_ne!(lhs, rhs);
     };
 }
 

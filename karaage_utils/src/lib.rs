@@ -52,6 +52,8 @@ macro_rules! must {
 #[cfg(test)]
 mod must_tests {
     use super::*;
+    use karaage_asserts::assert_eq;
+
     fn ok<T>(v: T) -> Result<T, ()> {
         Ok(v)
     }

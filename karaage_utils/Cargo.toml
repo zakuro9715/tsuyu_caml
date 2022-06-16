@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 derive_more = "0.99"
 paste = "1.0"
+
+[dev-dependencies]
+karaage_asserts = { path = "../karaage_asserts" }

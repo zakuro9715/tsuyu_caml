@@ -81,6 +81,7 @@ macro_rules! expr {
 mod macro_tests {
     use super::ast;
     use crate as ast;
+    use karaage_asserts::assert_eq;
     use karaagecc_source::Source;
 
     #[test]

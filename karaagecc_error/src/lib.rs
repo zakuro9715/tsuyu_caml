@@ -66,7 +66,7 @@ macro_rules! error {
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use karaage_asserts::*;
+    use karaage_asserts::{assert_eq, *};
 
     type ResultString = Result<String>;
     fn_test_data_traits!(Error);

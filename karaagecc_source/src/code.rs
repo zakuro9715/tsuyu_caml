@@ -93,7 +93,7 @@ impl Code {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use karaage_asserts::*;
+    use karaage_asserts::{assert_eq, *};
 
     fn_test_data_traits!(Code);
 

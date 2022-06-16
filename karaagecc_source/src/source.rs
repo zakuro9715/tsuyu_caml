@@ -49,7 +49,7 @@ impl Source {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use karaage_asserts::*;
+    use karaage_asserts::{assert_eq, assert_ne, *};
 
     fn_test_data_traits!(Source);
 
