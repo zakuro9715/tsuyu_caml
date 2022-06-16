@@ -51,6 +51,19 @@ macro_rules! assert_impls {
 }
 
 #[macro_export]
+macro_rules! fn_test_thread_safe {
+    ($( #[ $attr:meta ] )* $t:ty) => {
+        $crate::paste! {
+            #[test]
+            $( #[$attr] )*
+            fn [<test_ $t:lower _thread_safe>]() {
+                $crate::assert_impls!($t: Send & Sync);
+            }
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! fn_test_data_traits {
     ($( #[ $attr:meta ] )* $t:ty) => {
         $crate::paste! {
@@ -58,11 +71,12 @@ macro_rules! fn_test_data_traits {
             $( #[$attr] )*
             fn [<test_ $t:lower _data_traits>]() {
                 use std::fmt::Debug;
-                $crate::assert_impls!($t: Send & Sync & Clone & Eq & PartialEq & Debug);
+                $crate::assert_impls!($t: Clone & Eq & PartialEq & Debug);
             }
         }
     };
 }
+
 #[cfg(test)]
 mod tests {
     fn_test_data_traits!(i32);
@@ -83,5 +97,13 @@ mod tests {
     #[should_panic]
     fn test_assert_impls_fail() {
         assert_impls!(f32: Eq);
+    }
+
+    fn_test_thread_safe!(i32);
+
+    type Rc = std::rc::Rc<i32>;
+    fn_test_thread_safe! {
+        #[should_panic]
+        Rc
     }
 }
