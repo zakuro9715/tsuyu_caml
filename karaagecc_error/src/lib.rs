@@ -79,7 +79,7 @@ mod tests {
         assert_eq!(error!("123".to_string()), Error::new(Message("123".into())));
 
         let loc = Loc::new(2, 2, 1, 3);
-        assert_eq!(error!("123", loc.clone()).loc.unwrap(), loc.clone());
+        assert_eq!(error!("123", loc.clone()).loc.unwrap(), loc);
         assert_eq!(
             error!("123", loc.clone()),
             Error::new(Message("123".into())).with_loc(loc),
