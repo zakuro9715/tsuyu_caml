@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::{borrow::ToOwned, cmp, fmt};
+use std::{cmp, fmt};
 
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct Loc {
@@ -59,12 +59,6 @@ impl fmt::Display for Loc {
 impl fmt::Debug for Loc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Loc {}", self)
-    }
-}
-
-impl<'a> From<&'a Loc> for Loc {
-    fn from(loc: &'a Loc) -> Self {
-        loc.to_owned()
     }
 }
 
