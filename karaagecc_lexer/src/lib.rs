@@ -76,7 +76,7 @@ impl<'a> Lexer<'a> {
 
     fn new_token(&self, kind: TokenKind) -> Token {
         Token {
-            loc: self.loc,
+            loc: self.loc.clone(),
             kind,
         }
     }
@@ -85,7 +85,7 @@ impl<'a> Lexer<'a> {
 impl<'a> Lexer<'a> {
     fn read(&mut self) -> Option<Token> {
         self.skip_whitespaces();
-        self.loc = self.loc_head;
+        self.loc = self.loc_head.clone();
         self.loc.len = 0;
 
         if self.eof() {

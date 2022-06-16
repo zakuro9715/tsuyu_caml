@@ -6,7 +6,7 @@
 
 use std::{cmp, fmt};
 
-#[derive(PartialEq, Eq, Clone, Copy)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct Loc {
     pub index: usize,
     pub len: usize,

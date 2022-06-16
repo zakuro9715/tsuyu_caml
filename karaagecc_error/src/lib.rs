@@ -79,9 +79,9 @@ mod tests {
         assert_eq!(error!("123".to_string()), Error::new(Message("123".into())));
 
         let loc = Loc::new(2, 2, 1, 3);
-        assert_eq!(error!("123", loc).loc.unwrap(), loc);
+        assert_eq!(error!("123", loc.clone()).loc.unwrap(), loc.clone());
         assert_eq!(
-            error!("123", loc),
+            error!("123", loc.clone()),
             Error::new(Message("123".into())).with_loc(loc),
         )
     }
@@ -90,9 +90,9 @@ mod tests {
     fn test_error_format() {
         assert_eq!(format!("{}", error!("abc")), "abc");
 
-        let loc = Loc::new(0, 2, 1, 1);
+        let loc = &Loc::new(0, 2, 1, 1);
         assert_eq!(
-            format!("{}", error!("efg", loc)),
+            format!("{}", error!("efg", loc.clone())),
             format!("{}:{} {}", loc.line, loc.column, "efg"),
         );
     }
