@@ -3,6 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
+pub use impls::impls;
 pub use paste::paste;
 
 #[macro_export]
@@ -45,34 +46,19 @@ fn test_assert_iter_ne() {
 }
 
 #[macro_export]
-macro_rules! assert_impl {
-    ($type:ident < $trait:ident > ) => {{
-        $crate::paste! {
-            fn [<assert_impl_ $trait:lower>]<T: ?Sized + $trait>(){}
-
-            [<assert_impl_ $trait:lower>]::<$type>();
-        }
-    }};
-    ($type:ident < $( $trait:ident ),+ $(,)? > ) => {{
-        $(
-            $crate::assert_impl!($type<$trait>);
-        )+
-    }};
+macro_rules! assert_impls {
+    ($type:ty: $($trait_expr:tt)+) => { assert!($crate::impls!($type: $($trait_expr)+)) }
 }
 
 #[macro_export]
 macro_rules! fn_test_data_traits {
-    ($t:ty) => {
+    ($( #[ $attr:meta ] )* $t:ty) => {
         $crate::paste! {
             #[test]
+            $( #[$attr] )*
             fn [<test_ $t:lower _data_traits>]() {
                 use std::fmt::Debug;
-                $crate::assert_impl!($t<
-                    Send, Sync,
-                    Clone,
-                    Eq, PartialEq,
-                    Debug,
-                >);
+                $crate::assert_impls!($t: Send & Sync & Clone & Eq & PartialEq & Debug);
             }
         }
     };
@@ -80,4 +66,22 @@ macro_rules! fn_test_data_traits {
 #[cfg(test)]
 mod tests {
     fn_test_data_traits!(i32);
+
+    struct NoTrait {}
+
+    fn_test_data_traits! {
+        #[should_panic]
+        NoTrait
+    }
+
+    #[test]
+    fn test_assert_impls() {
+        assert_impls!(i32: Eq)
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_assert_impls_fail() {
+        assert_impls!(f32: Eq);
+    }
 }

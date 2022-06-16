@@ -7,6 +7,4 @@ edition = "2021"
 
 [dependencies]
 paste = "1.0"
-
-[dev-dependencies]
-trybuild = "1.0"
+impls = "1.0"
