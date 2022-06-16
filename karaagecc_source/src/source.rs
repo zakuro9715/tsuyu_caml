@@ -24,9 +24,12 @@ impl AsRef<Source> for Source {
 
 impl Source {
     pub fn inline(code: impl Into<Code>) -> Self {
-        use nanoid::nanoid;
+        Self::dummy(format!("__inline{}", nanoid::nanoid!()), code)
+    }
+
+    pub fn dummy(name: impl Into<String>, code: impl Into<Code>) -> Self {
         Self {
-            path: PathBuf::from(&format!("__inline{}", nanoid!())).into_boxed_path(),
+            path: PathBuf::from(name.into()).into_boxed_path(),
             code: code.into(),
         }
     }
@@ -61,6 +64,13 @@ mod tests {
             .unwrap()
             .contains("inline"));
         assert_eq!(source.code, "abc");
+    }
+
+    #[test]
+    fn test_dummy() {
+        let source = Source::dummy("name.c", "code");
+        assert_eq!(source.path.file_name().unwrap().to_str().unwrap(), "name.c",);
+        assert_eq!(source.code, "code");
     }
 
     #[test]
