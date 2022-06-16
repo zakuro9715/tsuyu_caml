@@ -4,10 +4,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::{cmp, fmt};
+use std::{cmp, fmt, rc::Rc};
+
+use crate::Source;
+use karaage_utils::must;
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct Loc {
+    pub source: Rc<Source>,
     pub index: usize,
     pub len: usize,
     pub line: usize,
@@ -17,7 +21,19 @@ pub struct Loc {
 #[macro_export]
 macro_rules! loc {
     ($begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
+        $crate::loc! {
+            std::rc::Rc::new($crate::Source::inline("")) => {
+                $begin , $end;
+                $line , $column;
+            }
+        }
+    };
+    ($source:expr => { $begin:expr , $end:expr ; $line:expr , $column:expr $(;)? }) => {
+        $crate::loc! { $source => $begin,$end; $line,$column; }
+    };
+    ($source:expr => $begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
         $crate::Loc {
+            source: ::std::rc::Rc::clone(&$source),
             index: $begin,
             len: $end - $begin,
             line: $line,
@@ -26,20 +42,11 @@ macro_rules! loc {
     };
 }
 
-impl Default for Loc {
-    fn default() -> Self {
-        Self {
-            index: 0,
-            len: 1,
-            line: 1,
-            column: 1,
-        }
-    }
-}
-
 impl PartialOrd for Loc {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        self.index.partial_cmp(&other.index)
+        Rc::ptr_eq(&self.source, &other.source)
+            .then(|| self.index.partial_cmp(&other.index))
+            .flatten()
     }
 }
 
@@ -47,7 +54,8 @@ impl fmt::Display for Loc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{{ index: {index}, len: {len}, line: {line}, column: {column} }}",
+            "{{ source: {s:?}, index: {index}, len: {len}, line: {line}, column: {column} }}",
+            s = must!(self.source.path.to_str()),
             index = self.index,
             len = self.len,
             line = self.line,
@@ -63,12 +71,19 @@ impl fmt::Debug for Loc {
 }
 
 impl Loc {
-    pub fn head() -> Self {
-        Self::default()
+    pub fn head(s: &Rc<Source>) -> Self {
+        Self {
+            source: Rc::clone(s),
+            index: 0,
+            len: 1,
+            line: 1,
+            column: 1,
+        }
     }
 
-    pub fn new(index: usize, len: usize, line: usize, column: usize) -> Self {
+    pub fn new(s: &Rc<Source>, index: usize, len: usize, line: usize, column: usize) -> Self {
         Self {
+            source: Rc::clone(s),
             index,
             len,
             line,
@@ -80,29 +95,37 @@ impl Loc {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use karaage_asserts::{assert_eq, *};
+    use karaage_asserts::{assert_eq, assert_ne, *};
 
     fn_test_data_traits!(Loc);
 
     #[test]
     fn test_head() {
-        assert_eq!(Loc::head(), Default::default());
+        let s = Rc::new(Source::inline(""));
+        assert_eq!(Loc::head(&s).index, 0);
     }
 
     #[test]
     fn test_new() {
+        let s = Rc::new(Source::inline(""));
         assert_eq!(
-            Loc::new(1, 1, 2, 3),
+            Loc::new(&s, 1, 1, 2, 3),
             Loc {
+                source: Rc::clone(&s),
                 index: 1,
                 len: 1,
                 line: 2,
                 column: 3,
             },
         );
+    }
+    #[test]
+    fn test_loc_macro() {
+        let s = Rc::new(Source::inline(""));
         assert_eq!(
-            loc! {2,3; 1,2},
+            loc! {s => 2,3; 1,2},
             Loc {
+                source: Rc::clone(&s),
                 index: 2,
                 len: 1,
                 line: 1,
@@ -110,23 +133,58 @@ mod tests {
             },
         );
         assert_eq!(
-            loc! {2,3; 1,2},
+            loc! {s => 2,3; 1,2},
             loc! {
-                2,3;
-                1,2;
+                s =>
+                    2,3;
+                    1,2;
+            },
+        );
+        assert_eq!(
+            loc! { s => { 2,3; 1,2 }},
+            loc! {
+                s => {
+                    2,3;
+                    1,2;
+                }
+            },
+        );
+
+        let loc = loc! {1,2; 2,3};
+        assert_eq!(
+            loc,
+            Loc {
+                source: Rc::clone(&loc.source),
+                index: loc.index,
+                len: loc.len,
+                line: loc.line,
+                column: loc.column,
             },
         );
     }
 
     #[test]
+    fn test_eq() {
+        let s1 = Rc::new(Source::inline(""));
+        let s2 = Rc::new(Source::inline(""));
+        assert_eq!(loc! {s1 => 0,1; 1,1}, loc! {s1 => 0,1; 1,1});
+        assert_ne!(loc! {s1 => 0,1; 1,1}, loc! {s1 => 0,2; 1,1});
+        assert_ne!(loc! {s1 => 0,1; 1,1}, loc! {s2 => 0,1; 1,1});
+    }
+
+    #[test]
     fn test_fmt() {
+        use std::path::Path;
+        let mut s = Source::inline("");
+        s.path = Path::new("name.c").to_path_buf().into_boxed_path();
+        let s = Rc::new(s);
         assert_eq!(
-            format!("{}", Loc::new(1, 2, 2, 3)),
-            "{ index: 1, len: 2, line: 2, column: 3 }",
+            format!("{}", loc! {s => 1,3; 2,3}),
+            "{ source: \"name.c\", index: 1, len: 2, line: 2, column: 3 }",
         );
         assert_eq!(
-            format!("{:?}", Loc::new(0, 1, 1, 2)),
-            "Loc { index: 0, len: 1, line: 1, column: 2 }",
+            format!("{:?}", loc! {s => 0,1;1,2}),
+            "Loc { source: \"name.c\", index: 0, len: 1, line: 1, column: 2 }",
         );
     }
 }

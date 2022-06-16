@@ -36,7 +36,14 @@ pub type Result<T> = std::result::Result<T, Error>;
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self.loc {
-            Some(loc) => write!(f, "{}:{} {}", loc.line, loc.column, self.kind),
+            Some(loc) => write!(
+                f,
+                "{}:{}:{} {}",
+                loc.source.path.to_string_lossy(),
+                loc.line,
+                loc.column,
+                self.kind
+            ),
             _ => write!(f, "{}", self.kind),
         }
     }
@@ -65,8 +72,11 @@ macro_rules! error {
 
 #[cfg(test)]
 mod tests {
+    use std::rc::Rc;
+
     use crate::*;
     use karaage_asserts::{assert_eq, *};
+    use karaagecc_source::{loc, Source};
 
     type ResultString = Result<String>;
     fn_test_data_traits!(Error);
@@ -75,10 +85,12 @@ mod tests {
     #[test]
     fn test_error() {
         use ErrorKind::*;
+        let s = Rc::new(Source::inline(""));
+
         assert_eq!(error!("123"), Error::new(Message("123".into())));
         assert_eq!(error!("123".to_string()), Error::new(Message("123".into())));
 
-        let loc = Loc::new(2, 2, 1, 3);
+        let loc = loc! {s => 2,4; 1,3};
         assert_eq!(error!("123", loc.clone()).loc.unwrap(), loc);
         assert_eq!(
             error!("123", loc.clone()),
@@ -89,11 +101,12 @@ mod tests {
     #[test]
     fn test_error_format() {
         assert_eq!(format!("{}", error!("abc")), "abc");
+        let s = Rc::new(Source::inline(""));
 
-        let loc = &Loc::new(0, 2, 1, 1);
+        let loc = loc! {s => 0,2;1,1};
         assert_eq!(
-            format!("{}", error!("efg", loc.clone())),
-            format!("{}:{} {}", loc.line, loc.column, "efg"),
+            format!("{}", error!("efg", loc)),
+            format!("{}:1:1 efg", s.path.to_string_lossy()),
         );
     }
 }

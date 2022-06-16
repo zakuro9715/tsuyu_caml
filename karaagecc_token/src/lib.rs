@@ -61,10 +61,11 @@ impl TokenKind {
 #[cfg(test)]
 mod token_kind_tests {
     use crate::{TokenKind::*, *};
+    use karaagecc_source::loc;
     #[test]
     fn test_into_token() {
         let kind = IntLiteral(42);
-        let loc = Loc::head();
+        let loc = loc! { 0,1; 1,1 };
         let expected = Token {
             kind: kind.clone(),
             loc: loc.clone(),
@@ -112,31 +113,36 @@ macro_rules! token_kind {
 mod token_tests {
     use crate::*;
     use karaage_asserts::{assert_eq, *};
+    use karaagecc_source::loc;
+
     fn_test_data_traits!(Token);
 
     #[test]
     fn test_new() {
+        let loc = loc! { 0,1; 1,1 };
         assert_eq!(
-            Token::new(TokenKind::IntLiteral(42), Loc::head()),
+            Token::new(TokenKind::IntLiteral(42), loc.clone()),
             Token {
                 kind: TokenKind::IntLiteral(42),
-                loc: Loc::head(),
+                loc,
             }
         )
     }
 
     #[test]
     fn test_token_macro() {
+        let loc = loc! { 0,1; 1,1 };
         assert_eq!(
-            token!(42, Loc::head()),
-            Token::new(TokenKind::IntLiteral(42), Loc::head()),
+            token!(42, loc.clone()),
+            Token::new(TokenKind::IntLiteral(42), loc),
         )
     }
 
     #[test]
     fn test_token_kind() {
-        assert_eq!(token!(42, Loc::head()).kind.key(), token_kind!(int_literal));
-        assert!(token!(42, Loc::head()).is(token_kind!(int_literal)));
+        let loc = loc! { 0,1; 1,1 };
+        assert_eq!(token!(42, loc.clone()).kind.key(), token_kind!(int_literal));
+        assert!(token!(42, loc).is(token_kind!(int_literal)));
     }
 }
 
@@ -170,22 +176,27 @@ impl<'a> TokenReader<'a> {
 #[cfg(test)]
 mod tokens_tests {
     use crate::*;
+
     use karaage_asserts::{assert_eq, *};
+    use karaagecc_source::loc;
 
     #[test]
     fn test_new_and_iter() {
+        let loc = loc! { 0,1; 1,1 };
         let tokens = [
-            token!(1, Loc::head()),
-            token!(2, Loc::head()),
-            token!(3, Loc::head()),
+            token!(1, loc.clone()),
+            token!(2, loc.clone()),
+            token!(3, loc),
         ];
         assert_iter_eq!(TokenReader::new(tokens.clone().into_iter()), tokens);
     }
+
     #[test]
     fn test_peek() {
-        let t1 = token!(1, Loc::head());
-        let t2 = token!(2, Loc::head());
-        let t3 = token!(3, Loc::head());
+        let loc = loc! { 0,1; 1,1 };
+        let t1 = token!(1, loc.clone());
+        let t2 = token!(2, loc.clone());
+        let t3 = token!(3, loc);
         let mut tokens = TokenReader::new([t1.clone(), t2.clone(), t3.clone()].into_iter());
         assert_eq!(tokens.peek(), Some(&t1));
         assert_eq!(tokens.next(), Some(t1));

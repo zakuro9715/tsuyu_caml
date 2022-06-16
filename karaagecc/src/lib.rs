@@ -3,19 +3,19 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+use std::{fs::File, io::Write, process::Command, rc::Rc};
+use tempfile::TempDir;
+
 use karaagecc_ast::{self as ast, stmt};
 use karaagecc_error::{Error, ErrorKind::Message, Result};
 use karaagecc_source::{Loc, Source};
 use karaagecc_token::TokenKind::{self, IntLiteral};
 use karaageir as ir;
 use karaageir::IR;
-use std::fs::File;
-use std::io::Write;
-use std::process::Command;
-use tempfile::TempDir;
 
-pub fn compile(source: impl AsRef<Source>) -> Result<String> {
-    let source = source.as_ref();
+pub fn compile(source: Source) -> Result<String> {
+    let source = Rc::new(source);
     let code = &source.code;
     let token = code
         .to_string()
@@ -23,8 +23,8 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
         .parse::<i64>()
         .map(IntLiteral)
         .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code)))
-        .into_token(Loc::head());
-    let mut file = ast::File::new(source);
+        .into_token(Loc::head(&source));
+    let mut file = ast::File::new(&source);
     file.stmts.push(match token.kind {
         TokenKind::IntLiteral(n) => Ok(stmt! { int(n) }),
         TokenKind::Error(message) => Err(Error::new(Message(message))),
@@ -46,7 +46,7 @@ pub fn compile(source: impl AsRef<Source>) -> Result<String> {
     Ok(karaageir_codegen::x86_64::compile(&ir))
 }
 
-pub fn run(source: impl AsRef<Source>) -> Result<std::process::Output> {
+pub fn run(source: Source) -> Result<std::process::Output> {
     let asm = compile(source)?;
 
     let tempdir = TempDir::new().expect("failed to create tempdir");

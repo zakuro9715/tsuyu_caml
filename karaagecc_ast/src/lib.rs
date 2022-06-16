@@ -4,11 +4,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+use std::rc::Rc;
+
 use karaagecc_source::Source;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct File<'a> {
-    pub source: &'a Source,
+pub struct File {
+    pub source: Rc<Source>,
     pub stmts: Vec<Stmt>,
 }
 
@@ -22,10 +24,10 @@ pub enum Expr {
     IntLiteral(i64),
 }
 
-impl<'a> File<'a> {
-    pub fn new(source: &'a Source) -> Self {
+impl File {
+    pub fn new(s: &Rc<Source>) -> Self {
         Self {
-            source,
+            source: Rc::clone(s),
             stmts: Vec::new(),
         }
     }
@@ -37,8 +39,8 @@ mod file_tests {
 
     #[test]
     fn test_new() {
-        let s = &Source::inline("");
-        let f = File::new(s);
+        let s = Rc::new(Source::inline(""));
+        let f = File::new(&s);
         assert_eq!(f.source, s);
         assert!(f.stmts.is_empty());
     }
@@ -55,7 +57,7 @@ macro_rules! ast {
         ]
     ) => {
         $crate::File{
-            source: $source,
+            source: Rc::clone(&$source),
             stmts: vec![
                 $( $crate::stmt!($( $stmt )*) ),+
             ]
@@ -79,6 +81,8 @@ macro_rules! expr {
 
 #[cfg(test)]
 mod macro_tests {
+    use std::rc::Rc;
+
     use super::ast;
     use crate as ast;
     use karaage_asserts::assert_eq;
@@ -86,7 +90,7 @@ mod macro_tests {
 
     #[test]
     fn test_macro() {
-        let s = &Source::inline("1\n2");
+        let s = Rc::new(Source::inline("1\n2"));
         assert_eq!(
             ast! {
                 s => [
