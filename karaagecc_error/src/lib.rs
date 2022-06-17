@@ -63,10 +63,10 @@ impl Error {
 #[macro_export]
 macro_rules! error {
     ($e:expr) => {
-        Error::new(ErrorKind::from($e))
+        $crate::Error::new($crate::ErrorKind::from($e))
     };
     ($e:expr, $loc:expr) => {
-        Error::new(ErrorKind::from($e)).with_loc($loc)
+        $crate::Error::new($crate::ErrorKind::from($e)).with_loc($loc)
     };
 }
 

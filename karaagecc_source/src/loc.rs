@@ -22,7 +22,7 @@ pub struct Loc {
 macro_rules! loc {
     ($begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
         $crate::loc! {
-            std::rc::Rc::new($crate::Source::inline("")) => {
+            ::std::rc::Rc::new($crate::Source::inline("")) => {
                 $begin , $end;
                 $line , $column;
             }

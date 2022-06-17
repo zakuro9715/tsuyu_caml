@@ -6,7 +6,8 @@
 
 use std::iter::Peekable;
 
-use karaage_utils::{derives::From, paste};
+use karaage_utils::derives::From;
+pub use karaage_utils::paste as _paste;
 use karaagecc_source::Loc;
 
 macro_rules! define_token_kind {
@@ -33,7 +34,7 @@ macro_rules! define_token_kind {
 
         impl TokenKind {
             pub fn key(&self) -> TokenKindKey {
-                paste! {
+                _paste! {
                     match self {
                         $(
                             Self::$variant $( ( $( [<__ $field:lower>]  ),+ ) )?
@@ -98,14 +99,14 @@ impl Token {
 #[macro_export]
 macro_rules! token {
     ($v:expr, $loc:expr) => {
-        TokenKind::from($v).into_token($loc)
+        $crate::TokenKind::from($v).into_token($loc)
     };
 }
 
 #[macro_export]
 macro_rules! token_kind {
     ($name:ident) => {
-        paste! { TokenKindKey::[< $name:camel>] }
+        $crate::_paste! { $crate::TokenKindKey::[< $name:camel>] }
     };
 }
 
