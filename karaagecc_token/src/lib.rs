@@ -61,6 +61,11 @@ mod token_kind_tests {
     fn test_token_kind_from() {
         assert_eq!(TokenKind::from(42), IntLiteral(42));
     }
+
+    #[test]
+    fn test_token_kind_key() {
+        assert_eq!(IntLiteral(42).key(), token_kind!(int_literal))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
