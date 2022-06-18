@@ -25,7 +25,7 @@ impl<'a> Parser<'a> {
     }
 }
 
-pub fn parse<'a, 'src>(s: &'src Rc<Source>, reader: TokenReader<'a>) -> ComposedResult<File> {
+pub fn parse(s: &Rc<Source>, reader: TokenReader<'_>) -> ComposedResult<File> {
     Parser::new(s, reader).parse()
 }
 
