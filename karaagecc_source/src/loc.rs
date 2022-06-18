@@ -80,16 +80,6 @@ impl Loc {
             column: 1,
         }
     }
-
-    pub fn new(s: &Rc<Source>, index: usize, len: usize, line: usize, column: usize) -> Self {
-        Self {
-            source: Rc::clone(s),
-            index,
-            len,
-            line,
-            column,
-        }
-    }
 }
 
 #[cfg(test)]
@@ -105,20 +95,6 @@ mod tests {
         assert_eq!(Loc::head(&s).index, 0);
     }
 
-    #[test]
-    fn test_new() {
-        let s = Rc::new(Source::inline(""));
-        assert_eq!(
-            Loc::new(&s, 1, 1, 2, 3),
-            Loc {
-                source: Rc::clone(&s),
-                index: 1,
-                len: 1,
-                line: 2,
-                column: 3,
-            },
-        );
-    }
     #[test]
     fn test_loc_macro() {
         let s = Rc::new(Source::inline(""));
