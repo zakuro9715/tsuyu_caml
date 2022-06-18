@@ -7,28 +7,17 @@
 use std::{fs::File, io::Write, process::Command, rc::Rc};
 use tempfile::TempDir;
 
-use karaagecc_ast::{self as ast, stmt};
-use karaagecc_error::{Error, ErrorKind::Message, Result};
-use karaagecc_source::{Loc, Source};
-use karaagecc_token::TokenKind::{self, IntLiteral};
+use karaagecc_ast::{self as ast};
+use karaagecc_error::ComposedResult;
+use karaagecc_lexer::tokenize;
+use karaagecc_parser::parse;
+use karaagecc_source::Source;
 use karaageir as ir;
 use karaageir::IR;
 
-pub fn compile(source: Source) -> Result<String> {
-    let source = Rc::new(source);
-    let code = &source.code;
-    let token = code
-        .to_string()
-        .trim()
-        .parse::<i64>()
-        .map(IntLiteral)
-        .unwrap_or_else(|_| TokenKind::Error(format!("parse error: {} is not number", code)))
-        .into_token(Loc::head(&source));
-    let mut file = ast::File::new(&source);
-    file.stmts.push(match token.kind {
-        TokenKind::IntLiteral(n) => Ok(stmt! { int(n) }),
-        TokenKind::Error(message) => Err(Error::new(Message(message))),
-    }?);
+pub fn compile(source: Source) -> ComposedResult<String> {
+    let s = Rc::new(source);
+    let file = parse(&s, tokenize(&s))?;
 
     let mut ir = IR::new();
     let main = ir.create_function("main").unwrap();
@@ -46,7 +35,7 @@ pub fn compile(source: Source) -> Result<String> {
     Ok(karaageir_codegen::x86_64::compile(&ir))
 }
 
-pub fn run(source: Source) -> Result<std::process::Output> {
+pub fn run(source: Source) -> ComposedResult<std::process::Output> {
     let asm = compile(source)?;
 
     let tempdir = TempDir::new().expect("failed to create tempdir");

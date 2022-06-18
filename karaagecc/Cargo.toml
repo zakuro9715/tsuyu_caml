@@ -7,8 +7,9 @@ edition = "2021"
 tempfile = "3.3.0"
 karaagecc_error = { path = "../karaagecc_error" }
 karaagecc_source = { path = "../karaagecc_source" }
-karaagecc_token = { path = "../karaagecc_token" }
 karaagecc_ast = { path = "../karaagecc_ast" }
+karaagecc_lexer = { path = "../karaagecc_lexer" }
+karaagecc_parser = { path = "../karaagecc_parser" }
 karaageir = { path = "../karaageir" }
 karaageir_codegen = { path = "../karaageir_codegen" }
 

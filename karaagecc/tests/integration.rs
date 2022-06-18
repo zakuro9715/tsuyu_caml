@@ -33,11 +33,7 @@ fn correct_sources() {
 
 #[test]
 fn compile_error() {
-    assert!(format!(
-        "{}",
-        karaagecc::compile(Source::inline("xx")).expect_err("")
-    )
-    .contains("error"));
+    karaagecc::compile(Source::inline("xx")).expect_err("");
 }
 
 #[derive(Serialize)]

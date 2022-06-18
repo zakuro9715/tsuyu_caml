@@ -31,6 +31,12 @@ fn main() {
             io::stderr().write_all(&output.stderr).unwrap();
             std::process::exit(output.status.code().unwrap());
         }
-        Err(e) => eprintln!("{}", e),
+        Err(errs) => eprintln!(
+            "{}",
+            errs.iter()
+                .map(|e| format!("{}", e))
+                .collect::<Vec<_>>()
+                .join("\n")
+        ),
     }
 }
