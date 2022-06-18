@@ -4,16 +4,42 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::array::IntoIter;
+pub struct InfinityIterator<T: Clone> {
+    v: T,
+}
 
-pub fn infinity_iter<T: Clone>(v: T) -> std::iter::Cycle<IntoIter<T, 1>> {
-    [v].into_iter().cycle()
+impl<T: Clone> InfinityIterator<T> {
+    fn new(v: T) -> Self {
+        Self { v }
+    }
+}
+
+impl<T: Clone> Iterator for InfinityIterator<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(self.v.clone())
+    }
+}
+
+pub fn infinity_iter<T: Clone>(v: T) -> InfinityIterator<T> {
+    InfinityIterator::new(v)
 }
 
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use karaage_asserts::assert_iter_eq;
+    use karaage_asserts::{assert_eq, assert_impls, assert_iter_eq};
+
+    #[test]
+    fn test_infinity_iterator() {
+        assert_eq!(std::mem::size_of::<InfinityIterator<()>>(), 0);
+        assert_eq!(std::mem::size_of::<InfinityIterator<u32>>(), 4);
+        assert_eq!(
+            std::mem::size_of::<InfinityIterator<String>>(),
+            std::mem::size_of::<String>(),
+        );
+        assert_impls!(InfinityIterator<()>: Iterator & IntoIterator & Sized);
+    }
 
     #[test]
     fn test_infinity() {
