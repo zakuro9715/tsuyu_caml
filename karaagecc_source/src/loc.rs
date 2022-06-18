@@ -80,6 +80,15 @@ impl Loc {
             column: 1,
         }
     }
+
+    pub fn to_short_string(&self) -> String {
+        format!(
+            "{}:{}:{}",
+            self.source.path.to_string_lossy(),
+            self.line,
+            self.column,
+        )
+    }
 }
 
 #[cfg(test)]
@@ -93,6 +102,15 @@ mod tests {
     fn test_head() {
         let s = Rc::new(Source::inline(""));
         assert_eq!(Loc::head(&s).index, 0);
+    }
+
+    #[test]
+    fn test_short_string() {
+        let s = Rc::new(Source {
+            path: std::path::PathBuf::from("abc").into_boxed_path(),
+            code: crate::Code::from(""),
+        });
+        assert_eq!((loc! { s => 4,6;2,4 }).to_short_string(), "abc:2:4");
     }
 
     #[test]

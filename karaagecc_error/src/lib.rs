@@ -38,14 +38,7 @@ pub type ComposedResult<T> = std::result::Result<T, Vec<Error>>;
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self.loc {
-            Some(loc) => write!(
-                f,
-                "{}:{}:{} {}",
-                loc.source.path.to_string_lossy(),
-                loc.line,
-                loc.column,
-                self.kind
-            ),
+            Some(loc) => write!(f, "{} {}", loc.to_short_string(), self.kind),
             _ => write!(f, "{}", self.kind),
         }
     }
