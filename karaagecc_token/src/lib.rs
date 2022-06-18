@@ -53,26 +53,9 @@ define_token_kind! {
     Error(String),
 }
 
-impl TokenKind {
-    pub fn into_token(self, loc: Loc) -> Token {
-        Token { kind: self, loc }
-    }
-}
-
 #[cfg(test)]
 mod token_kind_tests {
     use crate::{TokenKind::*, *};
-    use karaagecc_source::loc;
-    #[test]
-    fn test_into_token() {
-        let kind = IntLiteral(42);
-        let loc = loc! { 0,1; 1,1 };
-        let expected = Token {
-            kind: kind.clone(),
-            loc: loc.clone(),
-        };
-        assert_eq!(kind.into_token(loc), expected);
-    }
 
     #[test]
     fn test_token_kind_from() {
@@ -99,7 +82,7 @@ impl Token {
 #[macro_export]
 macro_rules! token {
     ($v:expr, $loc:expr) => {
-        $crate::TokenKind::from($v).into_token($loc)
+        $crate::Token::new($crate::TokenKind::from($v), $loc)
     };
 }
 
