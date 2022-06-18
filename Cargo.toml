@@ -8,6 +8,7 @@ members = [
   "karaagecc_token",
   "karaagecc_ast",
   "karaagecc_lexer",
+  "karaagecc_parser",
   "karaageir",
   "karaageir_codegen",
   "karaage_asserts",
