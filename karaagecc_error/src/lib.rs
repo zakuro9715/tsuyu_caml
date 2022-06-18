@@ -33,6 +33,8 @@ pub struct Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
+pub type ComposedResult<T> = std::result::Result<T, Vec<Error>>;
+
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self.loc {
