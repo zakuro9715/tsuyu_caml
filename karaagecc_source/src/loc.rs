@@ -65,7 +65,7 @@ impl fmt::Display for Loc {
             s = self
                 .source()
                 .map(|s| format!("{:?}", s.path.to_string_lossy()))
-                .unwrap_or("None".to_string()),
+                .unwrap_or_else(|| "None".to_string()),
             index = self.index,
             len = self.len,
             line = self.line,

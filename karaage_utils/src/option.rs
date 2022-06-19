@@ -93,7 +93,7 @@ mod must_tests {
 }
 
 pub fn clone_option_rc<T>(v: Option<&Rc<T>>) -> Option<Rc<T>> {
-    v.map(|v| Rc::clone(v))
+    v.map(Rc::clone)
 }
 
 #[test]
