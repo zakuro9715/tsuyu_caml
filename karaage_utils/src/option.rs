@@ -4,6 +4,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+use std::rc::Rc;
+
 pub trait IntoOption<T> {
     fn ok(self) -> Option<T>;
 }
@@ -88,4 +90,25 @@ mod must_tests {
     fn test_must_err_with_message() {
         must!(err(10), "unexpected err");
     }
+}
+
+pub fn clone_option_rc<T>(v: Option<&Rc<T>>) -> Option<Rc<T>> {
+    v.map(|v| Rc::clone(v))
+}
+
+#[test]
+fn test_clone_option_rc() {
+    fn f(v: Option<&Rc<i32>>) -> Option<Rc<i32>> {
+        clone_option_rc(v)
+    }
+
+    let v = Rc::new(10);
+    assert_eq!(Rc::strong_count(&v), 1);
+
+    let v1 = f(Some(&v));
+    assert_eq!(v1, Some(Rc::new(10)));
+    assert_eq!(Rc::strong_count(&v), 2);
+
+    let v2 = f(None);
+    assert_eq!(v2, None);
 }
