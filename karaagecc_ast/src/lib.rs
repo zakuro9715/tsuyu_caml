@@ -106,5 +106,8 @@ mod macro_tests {
                 ],
             }
         );
+
+        assert_eq!(stmt! { int(1) }, ast::Stmt::Expr(ast::Expr::IntLiteral(1)));
+        assert_eq!(expr! { int(1) }, ast::Expr::IntLiteral(1));
     }
 }
