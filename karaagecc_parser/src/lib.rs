@@ -20,7 +20,7 @@ impl<'a> Parser<'a> {
     pub fn new<'src>(s: &'src Rc<Source>, reader: TokenReader<'a>) -> Self {
         Self {
             reader,
-            loc: Loc::head(s),
+            loc: Loc::head(Some(s)),
         }
     }
 }
@@ -74,7 +74,7 @@ impl<'a> Parser<'a> {
 
 impl<'a> Parser<'a> {
     pub fn parse(&mut self) -> ComposedResult<File> {
-        let mut f = File::new(&self.loc.source);
+        let mut f = File::new(self.loc.source());
         let mut errors = Vec::new();
         while !self.eof() {
             match self.parse_stmt() {

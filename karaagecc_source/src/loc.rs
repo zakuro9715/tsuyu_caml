@@ -7,46 +7,53 @@
 use std::{cmp, fmt, rc::Rc};
 
 use crate::Source;
-use karaage_utils::must;
+use karaage_utils::{clone_option_rc, define_with_params_and_init};
 
-#[derive(PartialEq, Eq, Clone)]
-pub struct Loc {
-    pub source: Rc<Source>,
-    pub index: usize,
-    pub len: usize,
-    pub line: usize,
-    pub column: usize,
+define_with_params_and_init! {
+    #[derive(PartialEq, Eq, Clone)]
+    pub struct Loc {
+        source: Option<Rc<Source>>,
+        pub index: usize,
+        pub len: usize,
+        pub line: usize,
+        pub column: usize,
+    }
 }
 
 #[macro_export]
 macro_rules! loc {
-    ($begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
-        $crate::loc! {
-            ::std::rc::Rc::new($crate::Source::inline("")) => {
-                $begin , $end;
-                $line , $column;
-            }
-        }
-    };
     ($source:expr => { $begin:expr , $end:expr ; $line:expr , $column:expr $(;)? }) => {
         $crate::loc! { $source => $begin,$end; $line,$column; }
     };
     ($source:expr => $begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
-        $crate::Loc {
-            source: ::std::rc::Rc::clone(&$source),
+        $crate::Loc::init($crate::LocInitParams {
+            source: Some(::std::rc::Rc::clone(&$source)),
             index: $begin,
             len: $end - $begin,
             line: $line,
             column: $column,
-        }
+        })
+    };
+    ($begin:expr , $end:expr ; $line:expr , $column:expr $(;)?) => {
+        $crate::Loc::init($crate::LocInitParams {
+            source: None,
+            index: $begin,
+            len: $end - $begin,
+            line: $line,
+            column: $column,
+        })
     };
 }
 
 impl PartialOrd for Loc {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        Rc::ptr_eq(&self.source, &other.source)
-            .then(|| self.index.partial_cmp(&other.index))
-            .flatten()
+        (if let (Some(lhs_s), Some(rhs_s)) = (self.source(), other.source()) {
+            Rc::ptr_eq(lhs_s, rhs_s)
+        } else {
+            true
+        })
+        .then(|| self.index.partial_cmp(&other.index))
+        .flatten()
     }
 }
 
@@ -54,8 +61,11 @@ impl fmt::Display for Loc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{{ source: {s:?}, index: {index}, len: {len}, line: {line}, column: {column} }}",
-            s = must!(self.source.path.to_str()),
+            "{{ source: {s}, index: {index}, len: {len}, line: {line}, column: {column} }}",
+            s = self
+                .source()
+                .map(|s| format!("{:?}", s.path.to_string_lossy()))
+                .unwrap_or("None".to_string()),
             index = self.index,
             len = self.len,
             line = self.line,
@@ -71,9 +81,9 @@ impl fmt::Debug for Loc {
 }
 
 impl Loc {
-    pub fn head(s: &Rc<Source>) -> Self {
+    pub fn head(s: Option<&Rc<Source>>) -> Self {
         Self {
-            source: Rc::clone(s),
+            source: clone_option_rc(s),
             index: 0,
             len: 1,
             line: 1,
@@ -83,11 +93,17 @@ impl Loc {
 
     pub fn to_short_string(&self) -> String {
         format!(
-            "{}:{}:{}",
-            self.source.path.to_string_lossy(),
+            "{}{}:{}",
+            self.source()
+                .map(|s| format!("{}:", s.path.to_string_lossy()))
+                .unwrap_or_default(),
             self.line,
             self.column,
         )
+    }
+
+    pub fn source(&self) -> Option<&Rc<Source>> {
+        self.source.as_ref()
     }
 }
 
@@ -101,7 +117,8 @@ mod tests {
     #[test]
     fn test_head() {
         let s = Rc::new(Source::inline(""));
-        assert_eq!(Loc::head(&s).index, 0);
+        assert_eq!(Loc::head(Some(&s)).index, 0);
+        assert_eq!(Loc::head(Some(&s)).source.unwrap(), s);
     }
 
     #[test]
@@ -111,6 +128,7 @@ mod tests {
             code: crate::Code::from(""),
         });
         assert_eq!((loc! { s => 4,6;2,4 }).to_short_string(), "abc:2:4");
+        assert_eq!((loc! { 4,6;2,4 }).to_short_string(), "2:4");
     }
 
     #[test]
@@ -119,7 +137,7 @@ mod tests {
         assert_eq!(
             loc! {s => 2,3; 1,2},
             Loc {
-                source: Rc::clone(&s),
+                source: Some(Rc::clone(&s)),
                 index: 2,
                 len: 1,
                 line: 1,
@@ -148,7 +166,7 @@ mod tests {
         assert_eq!(
             loc,
             Loc {
-                source: Rc::clone(&loc.source),
+                source: None,
                 index: loc.index,
                 len: loc.len,
                 line: loc.line,
@@ -179,6 +197,14 @@ mod tests {
         assert_eq!(
             format!("{:?}", loc! {s => 0,1;1,2}),
             "Loc { source: \"name.c\", index: 0, len: 1, line: 1, column: 2 }",
+        );
+        assert_eq!(
+            format!("{}", loc! {1,3; 2,3}),
+            "{ source: None, index: 1, len: 2, line: 2, column: 3 }",
+        );
+        assert_eq!(
+            format!("{:?}", loc! {0,1;1,2}),
+            "Loc { source: None, index: 0, len: 1, line: 1, column: 2 }",
         );
     }
 }

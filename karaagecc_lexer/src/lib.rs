@@ -21,8 +21,8 @@ impl<'a> Lexer<'a> {
     pub fn new(s: &'a Rc<Source>) -> Self {
         Self {
             chars: s.code.chars().peekable(),
-            loc: Loc::head(s),
-            loc_head: Loc::head(s),
+            loc: Loc::head(Some(s)),
+            loc_head: Loc::head(Some(s)),
         }
     }
 

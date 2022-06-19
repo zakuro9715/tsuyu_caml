@@ -6,12 +6,15 @@
 
 use std::rc::Rc;
 
+use karaage_utils::{clone_option_rc, define_with_params_and_init};
 use karaagecc_source::Source;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct File {
-    pub source: Rc<Source>,
-    pub stmts: Vec<Stmt>,
+define_with_params_and_init! {
+    #[derive(Clone, Debug, PartialEq, Eq)]
+    pub struct File {
+        source: Option<Rc<Source>>,
+        pub stmts: Vec<Stmt>,
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -25,11 +28,15 @@ pub enum Expr {
 }
 
 impl File {
-    pub fn new(s: &Rc<Source>) -> Self {
+    pub fn new(s: Option<&Rc<Source>>) -> Self {
         Self {
-            source: Rc::clone(s),
+            source: clone_option_rc(s),
             stmts: Vec::new(),
         }
+    }
+
+    pub fn source(&self) -> Option<&Rc<Source>> {
+        self.source.as_ref()
     }
 }
 
@@ -40,15 +47,14 @@ mod file_tests {
     #[test]
     fn test_new() {
         let s = Rc::new(Source::inline(""));
-        let f = File::new(&s);
-        assert_eq!(f.source, s);
+        let f = File::new(Some(&s));
+        assert_eq!(f.source, Some(s));
         assert!(f.stmts.is_empty());
     }
 }
 
 #[macro_export]
 macro_rules! ast {
-    // root
     (
         $source:expr => [
             $(
@@ -56,12 +62,26 @@ macro_rules! ast {
             ),+ $(,)?
         ]
     ) => {
-        $crate::File{
-            source: Rc::clone(&$source),
+        $crate::File::init($crate::FileInitParams{
+            source: Some(Rc::clone(&$source)),
             stmts: vec![
                 $( $crate::stmt!($( $stmt )*) ),+
             ]
-        }
+        })
+    };
+    (
+        [
+            $(
+                { $( $stmt:tt )* }
+            ),+ $(,)?
+        ]
+    ) => {
+        $crate::File::init($crate::FileInitParams{
+            source: None,
+            stmts: vec![
+                $( $crate::stmt!($( $stmt )*) ),+
+            ]
+        })
     };
 }
 
@@ -99,7 +119,18 @@ mod macro_tests {
                 ]
             },
             ast::File {
-                source: s,
+                source: Some(Rc::clone(&s)),
+                stmts: vec![
+                    ast::Stmt::Expr(ast::Expr::IntLiteral(1)),
+                    ast::Stmt::Expr(ast::Expr::IntLiteral(2)),
+                ],
+            }
+        );
+
+        assert_eq!(
+            ast! { [{ int(1) }, { int(2) }] },
+            ast::File {
+                source: None,
                 stmts: vec![
                     ast::Stmt::Expr(ast::Expr::IntLiteral(1)),
                     ast::Stmt::Expr(ast::Expr::IntLiteral(2)),

@@ -614,6 +614,7 @@ name = "karaagecc_ast"
 version = "0.1.0"
 dependencies = [
  "karaage_asserts",
+ "karaage_utils",
  "karaagecc_source",
 ]
 
