@@ -17,7 +17,7 @@ use tsuyuir::IR;
 
 pub fn compile(source: Source) -> ComposedResult<String> {
     let s = Rc::new(source);
-    let file = parse(&s, tokenize(&s))?;
+    let file = parse(tokenize(&s))?;
 
     let mut ir = IR::new();
     let main = ir.create_function("main").unwrap();
@@ -28,9 +28,10 @@ pub fn compile(source: Source) -> ComposedResult<String> {
             })),
         }
     }
-    main.body.push(ir::Stmt::Return(ir::Expr::Immediate(
-        tsuyuir::Value::Int(0),
-    )));
+    main.body
+        .push(ir::Stmt::Return(ir::Expr::Immediate(tsuyuir::Value::Int(
+            0,
+        ))));
 
     Ok(tsuyuir_codegen::x86_64::compile(&ir))
 }

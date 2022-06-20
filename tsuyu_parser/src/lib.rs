@@ -4,11 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use std::rc::Rc;
-
 use tsuyu_ast::{expr, Expr, File, Stmt};
 use tsuyu_error::{error, ComposedResult, Error, Result};
-use tsuyu_source::{Loc, Source};
+use tsuyu_source::Loc;
 use tsuyu_token::{Token, TokenKind, TokenReader};
 
 pub struct Parser<'a> {
@@ -17,16 +15,15 @@ pub struct Parser<'a> {
 }
 
 impl<'a> Parser<'a> {
-    pub fn new<'src>(s: &'src Rc<Source>, reader: TokenReader<'a>) -> Self {
-        Self {
-            reader,
-            loc: Loc::head(Some(s)),
-        }
+    pub fn new(reader: TokenReader<'a>) -> Self {
+        let mut reader = reader;
+        let loc = Loc::head(reader.peek().and_then(|t| t.loc.source()));
+        Self { reader, loc }
     }
 }
 
-pub fn parse(s: &Rc<Source>, reader: TokenReader<'_>) -> ComposedResult<File> {
-    Parser::new(s, reader).parse()
+pub fn parse(reader: TokenReader<'_>) -> ComposedResult<File> {
+    Parser::new(reader).parse()
 }
 
 macro_rules! expect_token_kind {
@@ -109,23 +106,23 @@ impl<'a> Parser<'a> {
 #[cfg(test)]
 mod tests {
     use crate::*;
+    use std::rc::Rc;
     use tsuyu_asserts::assert_eq;
     use tsuyu_ast::{ast, File};
     use tsuyu_error::{error, Error};
     use tsuyu_lexer::tokenize;
     use tsuyu_source::{loc, Source};
-    use std::rc::Rc;
 
     fn code(code: &str) -> Rc<Source> {
         Rc::new(Source::inline(code))
     }
 
     fn test(s: &Rc<Source>, expected: File) {
-        assert_eq!(parse(s, tokenize(s)).unwrap(), expected);
+        assert_eq!(parse(tokenize(s)).unwrap(), expected);
     }
 
     fn test_error(s: &Rc<Source>, expected: Vec<Error>) {
-        assert_eq!(parse(s, tokenize(s)).unwrap_err(), expected);
+        assert_eq!(parse(tokenize(s)).unwrap_err(), expected);
     }
 
     #[test]
