@@ -1,7 +1,0 @@
-[package]
-name = "karaageir_codegen"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-karaageir = { path = "../karaageir" }

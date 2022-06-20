@@ -1,0 +1,11 @@
+[package]
+name = "tsuyu_token"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tsuyu_source = { path = "../tsuyu_source" }
+tsuyu_utils = { path = "../tsuyu_utils" }
+
+[dev-dependencies]
+tsuyu_asserts = { path = "../tsuyu_asserts" }

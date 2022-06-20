@@ -1,0 +1,13 @@
+[package]
+name = "tsuyu_cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tsuyu"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "3", features = ["derive"] }
+tsuyu = { path = "../tsuyu" }
+tsuyu_source = { path = "../tsuyu_source" }

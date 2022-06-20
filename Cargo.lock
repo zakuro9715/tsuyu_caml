@@ -576,134 +576,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "karaage_asserts"
-version = "0.1.0"
-dependencies = [
- "impls",
- "paste",
- "pretty_assertions",
-]
-
-[[package]]
-name = "karaage_utils"
-version = "0.1.0"
-dependencies = [
- "derive_more",
- "karaage_asserts",
- "paste",
-]
-
-[[package]]
-name = "karaagecc"
-version = "0.1.0"
-dependencies = [
- "insta",
- "karaagecc_ast",
- "karaagecc_error",
- "karaagecc_lexer",
- "karaagecc_parser",
- "karaagecc_source",
- "karaageir",
- "karaageir_codegen",
- "serde",
- "tempfile",
-]
-
-[[package]]
-name = "karaagecc_ast"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "karaage_utils",
- "karaagecc_source",
-]
-
-[[package]]
-name = "karaagecc_chars"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "rstest",
- "unicode-segmentation",
-]
-
-[[package]]
-name = "karaagecc_cli"
-version = "0.1.0"
-dependencies = [
- "clap",
- "karaagecc",
- "karaagecc_source",
-]
-
-[[package]]
-name = "karaagecc_error"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "karaage_utils",
- "karaagecc_source",
-]
-
-[[package]]
-name = "karaagecc_lexer"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "karaage_utils",
- "karaagecc_chars",
- "karaagecc_error",
- "karaagecc_source",
- "karaagecc_token",
-]
-
-[[package]]
-name = "karaagecc_parser"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "karaage_utils",
- "karaagecc_ast",
- "karaagecc_error",
- "karaagecc_lexer",
- "karaagecc_source",
- "karaagecc_token",
-]
-
-[[package]]
-name = "karaagecc_source"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "karaage_utils",
- "karaagecc_chars",
- "nanoid",
-]
-
-[[package]]
-name = "karaagecc_token"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
- "karaage_utils",
- "karaagecc_source",
-]
-
-[[package]]
-name = "karaageir"
-version = "0.1.0"
-dependencies = [
- "karaage_asserts",
-]
-
-[[package]]
-name = "karaageir_codegen"
-version = "0.1.0"
-dependencies = [
- "karaageir",
-]
-
-[[package]]
 name = "kv-log-macro"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1132,6 +1004,134 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d82e1a7758622a465f8cee077614c73484dac5b836c02ff6a40d5d1010324d7"
 dependencies = [
  "serde",
+]
+
+[[package]]
+name = "tsuyu"
+version = "0.1.0"
+dependencies = [
+ "insta",
+ "serde",
+ "tempfile",
+ "tsuyu_ast",
+ "tsuyu_error",
+ "tsuyu_lexer",
+ "tsuyu_parser",
+ "tsuyu_source",
+ "tsuyuir",
+ "tsuyuir_codegen",
+]
+
+[[package]]
+name = "tsuyu_asserts"
+version = "0.1.0"
+dependencies = [
+ "impls",
+ "paste",
+ "pretty_assertions",
+]
+
+[[package]]
+name = "tsuyu_ast"
+version = "0.1.0"
+dependencies = [
+ "tsuyu_asserts",
+ "tsuyu_source",
+ "tsuyu_utils",
+]
+
+[[package]]
+name = "tsuyu_chars"
+version = "0.1.0"
+dependencies = [
+ "rstest",
+ "tsuyu_asserts",
+ "unicode-segmentation",
+]
+
+[[package]]
+name = "tsuyu_cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "tsuyu",
+ "tsuyu_source",
+]
+
+[[package]]
+name = "tsuyu_error"
+version = "0.1.0"
+dependencies = [
+ "tsuyu_asserts",
+ "tsuyu_source",
+ "tsuyu_utils",
+]
+
+[[package]]
+name = "tsuyu_lexer"
+version = "0.1.0"
+dependencies = [
+ "tsuyu_asserts",
+ "tsuyu_chars",
+ "tsuyu_error",
+ "tsuyu_source",
+ "tsuyu_token",
+ "tsuyu_utils",
+]
+
+[[package]]
+name = "tsuyu_parser"
+version = "0.1.0"
+dependencies = [
+ "tsuyu_asserts",
+ "tsuyu_ast",
+ "tsuyu_error",
+ "tsuyu_lexer",
+ "tsuyu_source",
+ "tsuyu_token",
+ "tsuyu_utils",
+]
+
+[[package]]
+name = "tsuyu_source"
+version = "0.1.0"
+dependencies = [
+ "nanoid",
+ "tsuyu_asserts",
+ "tsuyu_chars",
+ "tsuyu_utils",
+]
+
+[[package]]
+name = "tsuyu_token"
+version = "0.1.0"
+dependencies = [
+ "tsuyu_asserts",
+ "tsuyu_source",
+ "tsuyu_utils",
+]
+
+[[package]]
+name = "tsuyu_utils"
+version = "0.1.0"
+dependencies = [
+ "derive_more",
+ "paste",
+ "tsuyu_asserts",
+]
+
+[[package]]
+name = "tsuyuir"
+version = "0.1.0"
+dependencies = [
+ "tsuyu_asserts",
+]
+
+[[package]]
+name = "tsuyuir_codegen"
+version = "0.1.0"
+dependencies = [
+ "tsuyuir",
 ]
 
 [[package]]

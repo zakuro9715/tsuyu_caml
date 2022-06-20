@@ -1,0 +1,12 @@
+[package]
+name = "tsuyu_source"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+nanoid = "0.4.0"
+tsuyu_utils = { path = "../tsuyu_utils" }
+tsuyu_chars = { path = "../tsuyu_chars" }
+
+[dev-dependencies]
+tsuyu_asserts = { path = "../tsuyu_asserts" }

@@ -1,0 +1,17 @@
+[package]
+name = "tsuyu_parser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tsuyu_utils = { path = "../tsuyu_utils" }
+tsuyu_error = { path = "../tsuyu_error" }
+tsuyu_ast = { path = "../tsuyu_ast" }
+tsuyu_token = { path = "../tsuyu_token" }
+tsuyu_source = { path = "../tsuyu_source" }
+
+[dev-dependencies]
+tsuyu_asserts = { path = "../tsuyu_asserts" }
+tsuyu_lexer = { path = "../tsuyu_lexer" }

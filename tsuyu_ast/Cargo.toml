@@ -1,0 +1,13 @@
+[package]
+name = "tsuyu_ast"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tsuyu_utils = { path = "../tsuyu_utils" }
+tsuyu_source = { path = "../tsuyu_source" }
+
+[dev-dependencies]
+tsuyu_asserts = { path = "../tsuyu_asserts" }

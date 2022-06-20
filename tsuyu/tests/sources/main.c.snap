@@ -1,0 +1,12 @@
+---
+source: tsuyu/tests/integration.rs
+expression: "tsuyu_testutil::run_source(path)"
+input_file: tsuyu/tests/sources/main.c
+---
+stdout_text = '''
+10
+'''
+stdout_bytes = []
+stderr_text = ''
+stderr_bytes = []
+code = 0
